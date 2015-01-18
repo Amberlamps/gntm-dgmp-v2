@@ -1,0 +1,14 @@
+include ../mixins/login
+
+extends ../layout
+
+block content
+  .header-topline
+    .center Welcome to Germany´s Next Topmodel Drinking Game Manager Professional Version 2
+  - if (!user)
+    +loginPage()
+  .page-index
+    .center
+      input(type='button', value='Register').button-confirm
+      input(type='button', value='Delete').button-warning
+      input(type='button', value='Cancel').button-neutral

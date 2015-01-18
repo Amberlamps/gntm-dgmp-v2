@@ -1,0 +1,27 @@
+mixin loginPage()
+  .page-login
+    .center
+      .login
+        form(action='/login', method='post')
+          .form-item
+            input(type='text', name='username', id='username', required)
+            label(for='username') Username
+          .form-item
+            input(type='password', name='password', id='password', required)
+            label(for='password') Passwort
+          input(type='submit', value='Einloggen')
+      .register
+        form(action='/register', method='post')
+          .form-item
+            input(type='text', name='username', id='username', required)
+            label(for='username') Username
+          .form-item
+            input(type='text', name='email', id='email', required)
+            label(for='email') Email
+          .form-item
+            input(type='password', name='password', id='password', required)
+            label(for='password') Passwort
+          .form-item
+            input(type='password', name='passwordwdh', id='passwordwdh', required)
+            label(for='passwordwdh') Passwort Wiederholung
+          input(type='submit', value='Registrieren')
