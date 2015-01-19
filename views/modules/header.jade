@@ -3,4 +3,11 @@ header
     .header-home
     .header-navigation
       .header-navigation-item Ligen
-    .header-user Alexander
+    .header-user
+      - if(user.name)
+        span= user.name
+        a(href='/logout') Logout
+      - else
+        a(href='/login') Login
+        span or
+        a(href='/login') Register

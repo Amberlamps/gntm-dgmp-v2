@@ -5,7 +5,7 @@ extends ../layout
 block content
   .header-topline
     .center Welcome to Germany´s Next Topmodel Drinking Game Manager Professional Version 2
-  - if (!user)
+  - if (!user.name)
     +loginPage()
   .page-index
     .center

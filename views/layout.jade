@@ -5,8 +5,10 @@ html
     meta(name='viewport', content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no')
     link(rel='stylesheet', href='/components/fontawesome/css/font-awesome.min.css')
     link(href='//fonts.googleapis.com/css?family=Hind:700,400,600', rel='stylesheet', type='text/css')
+    link(href='/components/sweetalert/lib/sweet-alert.css', rel='stylesheet', type='text/css')
     link(rel='stylesheet', type='text/css', href='/dist/css/' + pkg.name + '.' + pkg.version + '.min.css')
     script(type='text/javascript', src='/components/jquery/dist/jquery.min.js')
+    script(type='text/javascript', src='/components/sweetalert/lib/sweet-alert.min.js')
   body
     include modules/header
     block content

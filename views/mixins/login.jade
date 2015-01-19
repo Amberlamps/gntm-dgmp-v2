@@ -4,8 +4,8 @@ mixin loginPage()
       .login
         form(action='/login', method='post')
           .form-item
-            input(type='text', name='username', id='username', required)
-            label(for='username') Username
+            input(type='text', name='email', id='email', required)
+            label(for='email') Email
           .form-item
             input(type='password', name='password', id='password', required)
             label(for='password') Passwort
@@ -13,8 +13,8 @@ mixin loginPage()
       .register
         form(action='/register', method='post')
           .form-item
-            input(type='text', name='username', id='username', required)
-            label(for='username') Username
+            input(type='text', name='name', id='name', required)
+            label(for='name') Name
           .form-item
             input(type='text', name='email', id='email', required)
             label(for='email') Email

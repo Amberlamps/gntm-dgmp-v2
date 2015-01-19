@@ -7,8 +7,8 @@
    */
   var express = require('express');
   var router = express.Router();
-  var apis = require('./apis.js');
-  var pages = require('./pages.js');
+  var apis = require('routes/apis.js');
+  var pages = require('routes/pages.js');
 
 
   /**
