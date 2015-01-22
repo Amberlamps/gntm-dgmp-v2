@@ -19,7 +19,8 @@
    * FUNCTIONS.
    */
   function getIndexPage(req, res, next) {
-    res.render('pages/index');
+    res.send('GNTM DGMP wird rechtzeitig zum Start der neuen Saison zurück sein!');
+    //res.render('pages/index');
   }
 
   /**
