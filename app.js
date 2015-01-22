@@ -58,6 +58,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function exposeLocals(req, res, next) {
   app.locals.pkg = pkg;
+  app.locals.xhr = req.xhr;
   next();
 
 });

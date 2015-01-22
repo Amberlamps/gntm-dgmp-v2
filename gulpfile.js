@@ -68,4 +68,4 @@ gulp.task('serve', function() {
   });
 });
 
-gulp.task('default', ['js', 'styles']);
+gulp.task('default', ['js', 'styles', 'watch']);

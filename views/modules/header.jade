@@ -1,8 +1,14 @@
 header
   .center
     .header-home
+      a(href='/')
     .header-navigation
-      .header-navigation-item Ligen
+      .header-navigation-item
+        a(href='/leagues') Ligen
+      .header-navigation-item
+        a(href='/models') Models
+      .header-navigation-item
+        a(href='/rulebooks') Regelwerk
     .header-user
       - if(user.name)
         span= user.name
