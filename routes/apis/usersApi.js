@@ -1,147 +1,193 @@
-(function () {
+'use strict';
 
-  'use strict';
+/**
+ * MODULES.
+ */
+var express = require('express');
+var router = express.Router();
+var User = require('schemes').User;
+var authentication = require('middleware').authentication;
+var validation = require('middleware').validation;
+var patchUsersValidation = require('validations').patchUsersValidation;
+var postUsersValidation = require('validations').postUsersValidation;
+var putUsersValidation = require('validations').putUsersValidation;
 
-  /**
-   * MODULES.
-   */
-  var express = require('express');
-  var router = express.Router();
-  var User = require('schemes').User;
+
+/**
+ * ROUTES.
+ */
+
+// GET
+router.get('/:userId',
+  authentication(),
+  getUser);
+
+// GET
+router.get('/',
+  authentication(),
+  getUsers);
+
+// POST
+router.post('/',
+  validation(postUsersValidation),
+  postUsers);
+
+// PUT
+router.put('/:userId',
+  authentication(),
+  validation(putUsersValidation),
+  putUsers);
+
+// PATCH
+router.patch('/:userId',
+  authentication(),
+  validation(patchUsersValidation),
+  patchUsers);
+
+// DELETE
+router.delete('/:userId',
+  authentication('admin'),
+  validation(),
+  deleteUsers)
 
 
-  /**
-   * ROUTES.
-   */
-  router.route('/:userId?')
-    .get(getUsers)
-    .post(postUsers)
-    .put(putUsers)
-    .patch(patchUsers)
-    .delete(deleteUsers);
+/**
+ * FUNCTIONS.
+ */
+function getUser(req, res, next) {
 
-  /**
-   * FUNCTIONS.
-   */
-  function getUsers(req, res, next) {
+  var userId = req.params.userId;
 
-    var userId = req.params.userId;
+  var selector = {
+    _id: userId
+  };
 
-    var selector = {
-      _id: userId
-    };
+  User.findOne(selector, gotUser);
 
-    User.findOne(selector, gotUser);
+  function gotUser(err, user) {
 
-    function gotUser(err, user) {
-
-      if (err) {
-        return next(err);
-      }
-
-      res.json({
-        user: user
-      });
-
-    }
-
-  }
-
-  function postUsers(req, res, next) {
-
-    var params = req.body;
-
-    if (params.password !== params.passwordwdh) {
-      var err = new Error('Die Passwortwiederholung stimmt nicht überein');
-      err.status = 400;
+    if (err) {
       return next(err);
     }
 
-    var user = new User(params);
-    user.setPassword(params.password);
-    user.save(savedUser);
+    res.json({
+      user: user
+    });
 
-    function savedUser(err, user) {
+  }
 
-      if (err) {
-        return next(err);
-      }
+}
 
-      req.session.user = user;
+function getUser(req, res, next) {
 
-      res.status(201).json({
-        user: user
-      });
+  User.find({}).exec(gotUsers);
 
+  function gotUsers(err, user) {
+
+    if (err) {
+      return next(err);
     }
 
+    res.json({
+      users: users
+    });
+
   }
 
-  function putUsers(req, res, next) {
-    res.json(1);
+}
+
+function postUsers(req, res, next) {
+
+  var params = req.body;
+
+  if (params.password !== params.passwordwdh) {
+    var err = new Error('Die Passwortwiederholung stimmt nicht überein');
+    err.status = 400;
+    return next(err);
   }
 
-  function patchUsers(req, res, next) {
+  var user = new User(params);
+  user.setPassword(params.password);
+  user.save(savedUser);
 
-    var userId = req.params.userId;
+  function savedUser(err, user) {
 
-    var updates = req.body;
-
-    var selector = {
-      _id: userId
-    };
-
-    var data = {
-      $set: updates,
-      $inc: {
-        __v: 1
-      }
-    };
-
-    User.update(selector, data, updatedUser);
-
-    function updatedUser(err, updated) {
-
-      if (err) {
-        return next(err);
-      }
-
-      res.json({
-        updated: updated
-      });
-
+    if (err) {
+      return next(err);
     }
 
+    req.session.user = user;
+
+    res.status(201).json({
+      user: user
+    });
+
   }
 
-  function deleteUsers(req, res, next) {
+}
 
-    var userId = req.params.userId;
+function putUsers(req, res, next) {
+  res.json(1);
+}
 
-    var selector = {
-      _id: userId
-    };
+function patchUsers(req, res, next) {
 
-    User.remove(selector, removedUser);
+  var userId = req.params.userId;
 
-    function removedUser(err, deleted) {
+  var updates = req.body;
 
-      if (err) {
-        return next(err);
-      }
+  var selector = {
+    _id: userId
+  };
 
-      res.json({
-        deleted: deleted
-      });
+  var data = {
+    $set: updates,
+    $inc: {
+      __v: 1
+    }
+  };
 
+  User.update(selector, data, updatedUser);
+
+  function updatedUser(err, updated) {
+
+    if (err) {
+      return next(err);
     }
 
+    res.json({
+      updated: updated
+    });
+
   }
 
-  /**
-   * EXPORTS.
-   */
-  module.exports = router;
+}
 
+function deleteUsers(req, res, next) {
 
-}) ();
+  var userId = req.params.userId;
+
+  var selector = {
+    _id: userId
+  };
+
+  User.remove(selector, removedUser);
+
+  function removedUser(err, deleted) {
+
+    if (err) {
+      return next(err);
+    }
+
+    res.json({
+      deleted: deleted
+    });
+
+  }
+
+}
+
+/**
+ * EXPORTS.
+ */
+module.exports = router;

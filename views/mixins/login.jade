@@ -1,27 +1,27 @@
 mixin loginPage()
-  .page-login
-    .center
+  .center
+    .page-login
       .login
-        form(action='/login', method='post')
+        form(action='/login', method='post', data-action='/login', data-method='post', data-html='true')
           .form-item
-            input(type='text', name='email', id='email', required)
-            label(for='email') Email
+            input(type='text', name='email', id='loginemail', required, autocomplete='off')
+            label(for='loginemail') Email
           .form-item
-            input(type='password', name='password', id='password', required)
-            label(for='password') Passwort
+            input(type='password', name='password', id='loginpassword', required, autocomplete='off')
+            label(for='loginpassword') Passwort
           input(type='submit', value='Einloggen')
       .register
-        form(action='/register', method='post')
+        form(action='/users', method='post', data-action='/users', data-method='post')
           .form-item
-            input(type='text', name='name', id='name', required)
+            input(type='text', name='name', id='name', required, autocomplete='off')
             label(for='name') Name
           .form-item
-            input(type='text', name='email', id='email', required)
-            label(for='email') Email
+            input(type='text', name='email', id='registeremail', required, autocomplete='off')
+            label(for='registeremail') Email
           .form-item
-            input(type='password', name='password', id='password', required)
-            label(for='password') Passwort
+            input(type='password', name='password', id='registerpassword', required, autocomplete='off')
+            label(for='registerpassword') Passwort
           .form-item
-            input(type='password', name='passwordwdh', id='passwordwdh', required)
-            label(for='passwordwdh') Passwort Wiederholung
+            input(type='password', name='passwordwdh', id='registerpasswordwdh', required, autocomplete='off')
+            label(for='registerpasswordwdh') Passwort Wiederholung
           input(type='submit', value='Registrieren')

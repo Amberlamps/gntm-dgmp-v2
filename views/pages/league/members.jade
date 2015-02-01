@@ -1,0 +1,13 @@
+extends ../league.jade
+
+block page
+  ul
+    each member in members
+      li
+        span= member.member.name
+        - if (member.status === 'requested')
+          form(action='/memberships/' + member.id, method='patch', data-action='/memberships/' + member.id, data-method='patch', name='confirmMember')
+            input(type='hidden', name='status', value='granted')
+            input(type='submit', value='Bestätigen')
+          form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='deleteMember')
+            input(type='submit', value='Ablehnen')

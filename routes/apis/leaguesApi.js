@@ -1,101 +1,176 @@
-(function () {
+'use strict';
 
-  'use strict';
+/**
+ * MODULES.
+ */
+var express = require('express');
+var router = express.Router();
+var League = require('schemes').League;
+var authentication = require('routes/middleware').authentication;
+var validation = require('middleware').validation;
+var patchLeaguesValidation = require('validations').patchLeaguesValidation;
+var postLeaguesValidation = require('validations').postLeaguesValidation;
+var putLeaguesValidation = require('validations').putLeaguesValidation;
+var Membership = require('schemes').Membership;
 
-  /**
-   * MODULES.
-   */
-  var express = require('express');
-  var router = express.Router();
-  var League = require('schemes').League;
-  var Membership = require('schemes').Membership;
 
+/**
+ * ROUTES.
+ */
 
-  /**
-   * ROUTES.
-   */
-  router.route('/:leagueId?')
-    .get(getLeagues)
-    .post(postLeagues)
-    .put(putLeagues)
-    .patch(patchLeagues)
-    .delete(deleteLeagues);
+// GET
+router.get('/:leagueId',
+  authentication(),
+  getLeague);
 
-  /**
-   * FUNCTIONS.
-   */
-  function getLeagues(req, res, next) {
+router.get('/',
+  authentication(),
+  getLeagues);
 
-    var leagueId = req.params.leagueId;
+// POST
+router.post('/',
+  authentication(),
+  validation(postLeaguesValidation)
+  postLeagues);
 
-    var selector = {
-      _id: leagueId
-    };
+// PUT
+router.put('/:leagueId',
+  authentication(),
+  validation(putLeaguesValidation),
+  putLeagues);
 
-    League.findOne(selector, gotLeague);
+// PATCH
+router.patch('/:leagueId',
+  authentication(),
+  validation(patchLeaguesValidation),
+  patchLeagues)
 
-    function gotLeague(err, league) {
+// DELETE
+router.delete('/:leagueId',
+  authentication(),
+  deleteLeagues);
 
-      if (err) {
-        return next(err);
-      }
+/**
+ * FUNCTIONS.
+ */
+function getLeague(req, res, next) {
 
-      res.json({
-        league: league
-      });
+  var leagueId = req.params.leagueId;
 
+  var selector = {
+    _id: leagueId
+  };
+
+  League.findOne(selector, gotLeague);
+
+  function gotLeague(err, league) {
+
+    if (err) {
+      return next(err);
     }
+
+    res.json({
+      league: league
+    });
 
   }
 
-  function postLeagues(req, res, next) {
+}
 
-    var userId = '54bbce527de5dfcc20141eb7';
+function getLeagues(req, res, next) {
+
+  var selector = {};
+
+  League.find(selector, gotLeagues);
+
+  function gotLeagues(err, league) {
+
+    if (err) {
+      return next(err);
+    }
+
+    res.json({
+      leagues: leagues
+    });
+
+  }
+
+}
+
+function postLeagues(req, res, next) {
+
+  var selector = {
+    member: req.session.user.id,
+    status: 'granted'
+  };
+
+  Membership.findOne(selector, foundMembership);
+
+  function foundMembership(err, membership) {
+
+    if (err) {
+      return next(err);
+    }
+
+    if (membership) {
+      var error = new Error('You are already member of a league.');
+      error.status = 400;
+      return next(error);
+    }
 
     var params = req.body;
 
-    params.founder = userId;
+    params.founder = req.session.user.id;
+    params.sortname = params.name.toLowerCase();
 
     var league = new League(params);
 
     league.save(savedLeague);
 
-    function savedLeague(err, league) {
+  }
+
+  function savedLeague(err, league) {
+
+    if (err) {
+      return next(err);
+    }
+
+    var membership = new Membership({
+      member: req.session.user.id,
+      league: league.id,
+      role: 'admin',
+      status: 'granted'
+    });
+
+    membership.save(function savedMembership(err, membership) {
 
       if (err) {
         return next(err);
       }
 
-      var membership = new Membership({
-        member: userId,
-        league: league.id,
-        role: 'admin',
-        status: 'granted'
+      res.status(201).json({
+        league: league
       });
 
-      membership.save(function(err, membership) {
+    });
 
-        if (err) {
-          return next(err);
-        }
+  }
 
-        res.status(201).json({
-          league: league
-        });
+}
 
-      });
+function putLeagues(req, res, next) {
+  res.json(1);
+}
 
+function patchLeagues(req, res, next) {
+
+  confirmAuthority(req, updateLeague);
+
+  function updateLeague(err, membership) {
+
+    if (err) {
+      return next(err);
     }
-
-  }
-
-  function putLeagues(req, res, next) {
-    res.json(1);
-  }
-
-  function patchLeagues(req, res, next) {
-
-    var leagueId = req.params.leagueId;
 
     var updates = req.body;
 
@@ -112,21 +187,31 @@
 
     League.update(selector, data, updatedLeague);
 
-    function updatedLeague(err, updated) {
+  }
 
-      if (err) {
-        return next(err);
-      }
+  function updatedLeague(err, updated) {
 
-      res.json({
-        updated: updated
-      });
-
+    if (err) {
+      return next(err);
     }
+
+    res.json({
+      updated: updated
+    });
 
   }
 
-  function deleteLeagues(req, res, next) {
+}
+
+function deleteLeagues(req, res, next) {
+
+  confirmAuthority(req, removeLeague);
+
+  function removeLeague(err, membership) {
+
+    if (err) {
+      return next(err);
+    }
 
     var leagueId = req.params.leagueId;
 
@@ -136,24 +221,56 @@
 
     League.remove(selector, removedLeague);
 
-    function removedLeague(err, deleted) {
+  }
 
-      if (err) {
-        return next(err);
-      }
+  function removedLeague(err, deleted) {
 
-      res.json({
-        deleted: deleted
-      });
-
+    if (err) {
+      return next(err);
     }
+
+    res.json({
+      deleted: deleted
+    });
 
   }
 
-  /**
-   * EXPORTS.
-   */
-  module.exports = router;
+}
 
+function confirmAuthority(req, callback) {
 
-}) ();
+  var selector = {
+    member: req.session.user.id,
+    league: req.params.leagueId
+  };
+
+  Membership.findOne(selector, foundMembership);
+
+  function foundMembership(err, membership) {
+
+    if (err) {
+      return callback(err);
+    }
+
+    if (!membership) {
+      var error = new Error('You are not member of this league.');
+      error.status = 400;
+      return callback(error);
+    }
+
+    if (membership.role !== 'admin') {
+      var error = new Error('You are not authorized to update this league.');
+      error.status = 403;
+      return callback(error);
+    }
+
+    callback(null, membership);
+
+  }
+
+}
+
+/**
+ * EXPORTS.
+ */
+module.exports = router;

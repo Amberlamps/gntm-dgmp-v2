@@ -4,10 +4,18 @@ block content
 
   .header-topline
     .center
-      .header-topline-logo.header-topline-leagues
-      .header-topline-headline
-        h1 Offizielle Spielverbände
-        h2 Übersicht aller registrierten Spielverbände und Ligen
-  .page-leagues
-    .center Ligen
-    a(href='/sdfdsf') sdfdssdf
+      .header-topline-container
+        .header-topline-logo.header-topline-leagues
+        .header-topline-headline
+          h1 Offizielle Spielverbände
+          h2 Übersicht aller registrierten Spielverbände und Ligen
+  .center
+    .page-leagues
+      a(href='/leagues/add').button-confirm.page-leagues-new Neue Liga gründen
+      ul.page-leagues-list
+        li
+          .column.page-leagues-column Name
+        each league in leagues
+          li
+            a.page-leagues-list-item(href='/leagues/' + league._id)
+              .column= league.name

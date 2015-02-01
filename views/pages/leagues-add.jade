@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+
+  .header-topline
+    .center
+      .header-topline-container
+        .header-topline-logo.header-topline-leagues-add
+        .header-topline-headline
+          h1 Liga gründen
+          h2 Gründe deine eigene Liga
+  .center
+    .page-leagues-add
+      form(action='/leagues', method='post', data-action='/leagues', data-method='post')
+        ul
+          li.form-item
+            input(type='text', name='name', id='name', required='true')
+            label(for='name') Name
+          li.form-item
+            input(type='text', name='motto', id='motto', required='true')
+            label(for='motto') Motto
+          li.form-buttons
+            input(type='submit', value='Liga gründen')

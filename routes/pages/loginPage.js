@@ -16,19 +16,25 @@
   router.route('/')
     .get(getLoginPage)
     .post(postLoginPage);
+    
 
   /**
    * FUNCTIONS.
    */
   function getLoginPage(req, res, next) {
 
-    if (req.xhr) {
-      res.json({ message: 'login page' });
+    if (req.session.user) {
+      if (req.xhr) {
+        res.status(204).send();
+      } else {
+        res.redirect('/');
+      }
     } else {
       res.render('pages/login');
     }
 
   }
+
   function postLoginPage(req, res, next) {
 
     var email = req.body.email;
@@ -61,7 +67,7 @@
       req.session.user = user;
 
       if (req.xhr) {
-        res.json({ message: 'Erfolgreich eingeloogt' });
+        res.json({ message: 'Erfolgreich eingeloggt' });
       } else {
         res.redirect('/');
       }

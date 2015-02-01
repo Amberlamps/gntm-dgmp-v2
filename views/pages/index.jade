@@ -4,11 +4,16 @@ extends ../layout
 
 block content
   .header-topline
-    .center Welcome to Germany´s Next Topmodel Drinking Game Manager Professional Version 2
+    .center
+      .header-topline-container
+        .header-topline-logo.header-topline-index
+        .header-topline-headline
+          h1 Herzlich Willkommen!
+          h2 Germany's Next Topmodel Drinking Game Manager Professional
   - if (!user.name)
     +loginPage()
-  .page-index
-    .center
+  .center
+    .page-index
       input(type='button', value='Register').button-confirm
       input(type='button', value='Delete').button-warning
       input(type='button', value='Cancel').button-neutral

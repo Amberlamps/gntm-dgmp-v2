@@ -4,6 +4,11 @@ extends ../layout
 
 block content
   .header-topline
-    .center Einloggen oder Registrieren
+    .center
+      .header-topline-container
+        .header-topline-logo.header-topline-login
+        .header-topline-headline
+          h1 Einloggen oder Anmelden
+          h2 Log dich in deinen Account ein oder erstelle dir einen.
   +loginPage()
   

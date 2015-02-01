@@ -1,168 +1,214 @@
-(function () {
+'use strict';
 
-  'use strict';
-
-  /**
-   * MODULES.
-   */
-  var express = require('express');
-  var router = express.Router();
-  var Rulebook = require('schemes').Rulebook;
-
-
-  /**
-   * VARIABLES.
-   */
-  var defaultDrinkingRules = [{
-    name: 'Name gesagt',
-    description: 'Getrunken wird, wenn der Name eines Models genannt wird',
-    target: 'manager',
-    gulps: 1
-  }, {
-    name: 'Name geschrieben',
-    description: 'Getrunken wird, wenn der Name eines Models irgendwo geschrieben steht.',
-    target: 'manager',
-    gulps: 2
-  }, {
-    name: 'Model weint',
-    description: 'Getrunken wird, wenn ein Model weint.',
-    target: 'manager',
-    gulps: 5
-  }, {
-    name: 'Mädchen/Chicas gesagt',
-    description: 'Getrunken wird, wenn "Mädchen" in irgendeiner Sprache genannt wird.',
-    target: 'alle',
-    gulps: 1
-  }];
-  var defaultDrinkingDistribution = [5, 4, 3, 2, 1];
+/**
+ * MODULES.
+ */
+var express = require('express');
+var router = express.Router();
+var Rulebook = require('schemes').Rulebook;
+var authentication = require('routes/middleware').authentication;
+var validation = require('middleware').validation;
+var patchRulebooksValidation = require('validations').patchRulebooksValidation;
+var postRulebooksValidation = require('validations').postRulebooksValidation;
+var putRulebooksValidation = require('validations').putRulebooksValidation;
 
 
-  /**
-   * ROUTES.
-   */
-  router.route('/:rulebookId?')
-    .get(getRulebooks)
-    .post(postRulebooks)
-    .put(putRulebooks)
-    .patch(patchRulebooks)
-    .delete(deleteRulebooks);
+/**
+ * VARIABLES.
+ */
+var defaultDrinkingRules = [{
+  name: 'Name gesagt',
+  description: 'Getrunken wird, wenn der Name eines Models genannt wird',
+  target: 'manager',
+  gulps: 1
+}, {
+  name: 'Name geschrieben',
+  description: 'Getrunken wird, wenn der Name eines Models irgendwo geschrieben steht.',
+  target: 'manager',
+  gulps: 2
+}, {
+  name: 'Model weint',
+  description: 'Getrunken wird, wenn ein Model weint.',
+  target: 'manager',
+  gulps: 5
+}, {
+  name: 'Mädchen/Chicas gesagt',
+  description: 'Getrunken wird, wenn "Mädchen" in irgendeiner Sprache genannt wird.',
+  target: 'alle',
+  gulps: 1
+}];
+var defaultDrinkingDistribution = [5, 4, 3, 2, 1];
 
-  /**
-   * FUNCTIONS.
-   */
-  function getRulebooks(req, res, next) {
 
-    var leagueId = req.query.leagueId;
+/**
+ * ROUTES.
+ */
 
-    var selector = {
-      league: leagueId
-    };
+// GET
+router.get('/:rulebookId',
+  authentication(),
+  getRulebook);
 
-    Rulebook.findOne(selector, gotRulebook);
+// GET
+router.get('/',
+  authentication(),
+  getRulebooks);
 
-    function gotRulebook(err, rulebook) {
+// POST
+router.post('/',
+  authentication(),
+  validation(postRulebooksValidation)
+  postRulebooks);
 
-      if (err) {
-        return next(err);
-      }
+// PUT
+router.put('/:rulebookId',
+  authentication(),
+  validation(putRulebooksValidation),
+  putRulebooks);
 
-      res.json({
-        rulebook: rulebook
-      });
+// PATCH
+router.patch('/:rulebookId',
+  authentication(),
+  validation(patchRulebooksValidation),
+  patchRulebooks)
 
+// DELETE
+router.delete('/:rulebookId',
+  authentication(),
+  deleteRulebooks);
+
+
+/**
+ * FUNCTIONS.
+ */
+function getRulebook(req, res, next) {
+
+  var leagueId = req.query.leagueId;
+
+  var selector = {
+    league: leagueId
+  };
+
+  Rulebook.findOne(selector, gotRulebook);
+
+  function gotRulebook(err, rulebook) {
+
+    if (err) {
+      return next(err);
     }
 
+    res.json({
+      rulebook: rulebook
+    });
+
   }
 
-  function postRulebooks(req, res, next) {
+}
 
-    var params = req.body;
- 
-    params.drinkingRules = params.drinkingRules || defaultDrinkingRules;
-    params.drinkingDistribution = params.drinkingDistribution || defaultDrinkingDistribution;
+function getRulebooks(req, res, next) {
 
-    var rulebook = new Rulebook(params);
+  Rulebook.find({}).exec(gotRulebooks);
 
-    rulebook.save(savedRulebook);
+  function gotRulebooks(err, rulebooks) {
 
-    function savedRulebook(err, rulebook) {
-
-      if (err) {
-        return next(err);
-      }
-
-      res.status(201).json({
-        rulebook: rulebook
-      });
-
+    if (err) {
+      return next(err);
     }
 
+    res.json({
+      rulebooks: rulebooks
+    });
+
   }
 
-  function putRulebooks(req, res, next) {
-    res.json(1);
-  }
+}
 
-  function patchRulebooks(req, res, next) {
+function postRulebooks(req, res, next) {
 
-    var rulebookId = req.params.rulebookId;
+  var params = req.body;
 
-    var updates = req.body;
+  params.drinkingRules = params.drinkingRules || defaultDrinkingRules;
+  params.drinkingDistribution = params.drinkingDistribution || defaultDrinkingDistribution;
 
-    var selector = {
-      _id: rulebookId
-    };
+  var rulebook = new Rulebook(params);
 
-    var data = {
-      $set: updates,
-      $inc: {
-        __v: 1
-      }
-    };
+  rulebook.save(savedRulebook);
 
-    Rulebook.update(selector, data, updatedRulebook);
+  function savedRulebook(err, rulebook) {
 
-    function updatedRulebook(err, updated) {
-
-      if (err) {
-        return next(err);
-      }
-
-      res.json({
-        updated: updated
-      });
-
+    if (err) {
+      return next(err);
     }
 
+    res.status(201).json({
+      rulebook: rulebook
+    });
+
   }
 
-  function deleteRulebooks(req, res, next) {
+}
 
-    var rulebookId = req.params.rulebookId;
+function putRulebooks(req, res, next) {
+  res.json(1);
+}
 
-    var selector = {
-      _id: rulebookId
-    };
+function patchRulebooks(req, res, next) {
 
-    Rulebook.remove(selector, removedRulebook);
+  var rulebookId = req.params.rulebookId;
 
-    function removedRulebook(err, deleted) {
+  var updates = req.body;
 
-      if (err) {
-        return next(err);
-      }
+  var selector = {
+    _id: rulebookId
+  };
 
-      res.json({
-        deleted: deleted
-      });
-
+  var data = {
+    $set: updates,
+    $inc: {
+      __v: 1
     }
+  };
+
+  Rulebook.update(selector, data, updatedRulebook);
+
+  function updatedRulebook(err, updated) {
+
+    if (err) {
+      return next(err);
+    }
+
+    res.json({
+      updated: updated
+    });
+
   }
 
-  /**
-   * EXPORTS.
-   */
-  module.exports = router;
+}
 
+function deleteRulebooks(req, res, next) {
 
-}) ();
+  var rulebookId = req.params.rulebookId;
+
+  var selector = {
+    _id: rulebookId
+  };
+
+  Rulebook.remove(selector, removedRulebook);
+
+  function removedRulebook(err, deleted) {
+
+    if (err) {
+      return next(err);
+    }
+
+    res.json({
+      deleted: deleted
+    });
+
+  }
+}
+
+/**
+ * EXPORTS.
+ */
+module.exports = router;

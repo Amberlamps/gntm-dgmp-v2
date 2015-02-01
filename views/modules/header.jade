@@ -1,18 +1,18 @@
 header
   .center
-    .header-home
-      a(href='/')
-    .header-navigation
-      .header-navigation-item
-        a(href='/leagues') Ligen
-      .header-navigation-item
-        a(href='/models') Models
-      .header-navigation-item
-        a(href='/rulebooks') Regelwerk
+    a.header-home-item(href='/')
+    a.header-navigation-item(href='/leagues') Ligen
+    a.header-navigation-item(href='/models') Models
+    a.header-navigation-item(href='/rulebooks') Regelwerk
     .header-user
       - if(user.name)
-        span= user.name
-        a(href='/logout') Logout
+        .user-widget
+          label(for='user-widget')
+            .user-widget-name= user.name
+            .user-widget-navigation
+          input(type='checkbox', id='user-widget')
+          .user-widget-navigation-list
+            a(href='/logout').user-widget-navigation-list-item.user-widget-navigation-list-item-logout Logout
       - else
         a(href='/login') Login
         span or

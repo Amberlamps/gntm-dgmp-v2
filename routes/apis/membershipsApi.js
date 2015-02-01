@@ -1,87 +1,158 @@
-(function () {
+'use strict';
 
-  'use strict';
+/**
+ * MODULES.
+ */
+var express = require('express');
+var router = express.Router();
+var authentication = require('routes/middleware').authentication;
+var validation = require('middleware').validation;
+var patchMembershipsValidation = require('validations').patchMembershipsValidation;
+var postMembershipsValidation = require('validations').postMembershipsValidation;
+var putMembershipsValidation = require('validations').putMembershipsValidation;
+var Membership = require('schemes').Membership;
 
-  /**
-   * MODULES.
-   */
-  var express = require('express');
-  var router = express.Router();
-  var Membership = require('schemes').Membership;
+
+/**
+ * ROUTES.
+ */
+
+// GET
+router.get('/:leagueId',
+  authentication(),
+  getMemberships);
+
+// POST
+router.post('/',
+  authentication(),
+  validation(postMembershipsValidation)
+  postMemberships);
+
+// PUT
+router.put('/:membershipId',
+  authentication(),
+  validation(putMembershipsValidation),
+  putMemberships);
+
+// PATCH
+router.patch('/:membershipId',
+  authentication(),
+  validation(patchMembershipsValidation),
+  patchMemberships)
+
+// DELETE
+router.delete('/:membershipId',
+  authentication(),
+  deleteMemberships);
 
 
-  /**
-   * ROUTES.
-   */
-  router.route('/:membershipId?')
-    .get(getMemberships)
-    .post(postMemberships)
-    .put(putMemberships)
-    .patch(patchMemberships)
-    .delete(deleteMemberships);
+/**
+ * FUNCTIONS.
+ */
+function getMemberships(req, res, next) {
 
-  var userId = '54bbce527de5dfcc20141eb7';
+  var leagueId = req.params.leagueId;
 
-  /**
-   * FUNCTIONS.
-   */
-  function getMemberships(req, res, next) {
+  var selector = {
+    league: leagueId
+  };
 
-    var leagueId = req.query.leagueId;
+  Membership.find(selector).populate('member').exec(gotMemberships);
 
-    var selector = {
-      league: leagueId
-    };
+  function gotMemberships(err, memberships) {
 
-    Membership.find(selector).populate('member').exec(gotMemberships);
-
-    function gotMemberships(err, memberships) {
-
-      if (err) {
-        return next(err);
-      }
-
-      res.json({
-        memberships: memberships
-      });
-
+    if (err) {
+      return next(err);
     }
 
+    res.json({
+      memberships: memberships
+    });
+
   }
 
-  function postMemberships(req, res, next) {
+}
 
-    var params = req.body;
- 
-    params.member = userId;
+function postMemberships(req, res, next) {
 
-    var membership = new Membership(params);
+  var params = req.body;
+  params.member = req.session.user._id;
 
-    membership.save(savedMembership);
+  var selector = {
+    member: params.member,
+    league: params.leagueId
+  };
 
-    function savedMembership(err, membership) {
+  Membership.findOne(selector, foundMembership);
 
-      if (err) {
-        return next(err);
-      }
+  /**
+   * Check whether user already has a membership
+   * with given leagueId.
+   */
+  function foundMembership(err, membership) {
 
-      res.status(201).json({
-        membership: membership
-      });
-
+    if (err) {
+      return next(err);
     }
 
+    if (membership) {
+      var error {};
+      if (membership.status === 'granted') {
+        error = new Error('You are already member of that league.');
+      } else if (membership.status === 'requested') {
+        error = new Error('There is already a request pending.');
+      }
+      error.status = 400;
+      return next(error);
+    }
+
+    var newMembership = new Membership(params);
+    newMembership.save(savedMembership);
+
   }
 
-  function putMemberships(req, res, next) {
-    res.json(1);
+  function savedMembership(err, membership) {
+
+    if (err) {
+      return next(err);
+    }
+
+    res.status(201).json({
+      membership: membership
+    });
+
   }
 
-  function patchMemberships(req, res, next) {
+}
+
+function putMemberships(req, res, next) {
+  res.json(1);
+}
+
+function patchMemberships(req, res, next) {
+
+  var updates = req.body;
+
+  var selector = {
+    member: req.session.user.id,
+    league: updates.leagueId
+  };
+
+  Membership.findOne(selector, foundMembership);
+
+  function foundMembership(err, membership) {
+
+    if (err) {
+      return next(err);
+    }
+
+    if (membership.status !== 'admin') {
+      var error = new Error('You are not allowed to update membership.');
+      error.status = 403;
+      return next(error);
+    }
 
     var membershipId = req.params.membershipId;
-
-    var updates = req.body;
 
     var selector = {
       _id: membershipId
@@ -96,48 +167,70 @@
 
     Membership.update(selector, data, updatedMembership);
 
-    function updatedMembership(err, updated) {
+  }
 
-      if (err) {
-        return next(err);
-      }
+  function updatedMembership(err, updated) {
 
-      res.json({
-        updated: updated
-      });
-
+    if (err) {
+      return next(err);
     }
+
+    res.json({
+      updated: updated
+    });
 
   }
 
-  function deleteMemberships(req, res, next) {
+}
 
-    var membershipId = req.params.membershipId;
+function deleteMemberships(req, res, next) {
 
-    var selector = {
-      _id: membershipId
-    };
+  var membershipId = req.params.membershipId;
+
+  var selector = {
+    _id: membershipId
+  };
+
+  Membership.findOne(selector, foundMembership);
+
+  function foundMembership(err, membership) {
+
+    if (err) {
+      return next(err);
+    }
+
+    if (!membership) {
+      var error = new Error('Membership Id not found.');
+      error.status = 400;
+      return next(error);
+    }
+
+    if (membership.member !== req.session.user.id) {
+      var error = new Error('You are not allowed to delete membership.');
+      error.status = 400;
+      return next(error);
+    }
 
     Membership.remove(selector, removedMembership);
 
-    function removedMembership(err, deleted) {
+  }
 
-      if (err) {
-        return next(err);
-      }
 
-      res.json({
-        deleted: deleted
-      });
+  function removedMembership(err, deleted) {
 
+    if (err) {
+      return next(err);
     }
+
+    res.json({
+      deleted: deleted
+    });
 
   }
 
-  /**
-   * EXPORTS.
-   */
-  module.exports = router;
+}
 
-
-}) ();
+/**
+ * EXPORTS.
+ */
+module.exports = router;
