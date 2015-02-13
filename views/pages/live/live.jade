@@ -1,0 +1,102 @@
+doctype html
+html
+  head
+    title Germany's Next Topmodel - Drinking Game Manager Professional
+    meta(name='viewport', content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no')
+    link(rel='stylesheet', href='/components/fontawesome/css/font-awesome.min.css')
+    link(href='//fonts.googleapis.com/css?family=Hind:700,400,600', rel='stylesheet', type='text/css')
+    link(href='/components/sweetalert/lib/sweet-alert.css', rel='stylesheet', type='text/css')
+    link(href='/components/nprogress/nprogress.css', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', type='text/css', href='/dist/css/' + pkg.name + '.' + pkg.version + '.min.css')
+    script(type='text/javascript', src='/components/jquery/dist/jquery.min.js')
+    script(type='text/javascript', src='/components/sweetalert/lib/sweet-alert.min.js')
+    script(type='text/javascript', src='/components/nprogress/nprogress.js')
+  body
+    .livepage
+      .live-girls
+        each girl in models
+          .live-girl-container
+            .live-girl(style="background-image: url('/images/" + girl.pictureFace + "')")
+              .live-girl-name= girl.displayname
+              .live-girl-stats
+                .live-girl-stats-drinks 0
+                .live-girl-stats-jobs 0
+        .live-girl-container
+          .live-all
+      .live-statistics
+        .live-slider
+        .live-statistics-content
+          .live-statistics-controls
+            input(type='button', value='Spieltag abschließen')
+            input(type='button', value='Spieltag zurücksetzen')
+          .live-statistics-rankings
+            .live-statistics-ranking
+              .live-statistics-headline Model Ranking
+              .live-statistics-rank
+                .live-statistics-rank-picture
+                .live-statistics-rank-balken
+                .live-statistics-rank-count 3
+              .live-statistics-rank
+                .live-statistics-rank-picture
+                .live-statistics-rank-balken
+                .live-statistics-rank-count 3
+              .live-statistics-rank
+                .live-statistics-rank-picture
+                .live-statistics-rank-balken
+                .live-statistics-rank-count 3
+            .live-statistics-ranking
+              .live-statistics-headline Manager Ranking
+              .live-statistics-rank
+                .live-statistics-rank-picture
+                .live-statistics-rank-balken
+                .live-statistics-rank-count 3
+              .live-statistics-rank
+                .live-statistics-rank-picture
+                .live-statistics-rank-balken
+                .live-statistics-rank-count 3
+              .live-statistics-rank
+                .live-statistics-rank-picture
+                .live-statistics-rank-balken
+                .live-statistics-rank-count 3
+      .live-closeup
+        .live-closeup-girl
+          .live-closeup-close Close
+          .live-girl-container
+            .live-girl
+              .live-girl-name
+              .live-girl-stats
+                .live-girl-stats-drinks
+                .live-girl-stats-jobs
+        .live-closeup-actions
+          .live-closeup-actions-container
+            .live-action.live-drink
+              .live-action-minus -
+              .live-action-plus +
+              .live-action-content
+                .live-action-value 2
+                .live-action-name Name gesagt
+            .live-action.live-drink
+              .live-action-minus -
+              .live-action-plus +
+              .live-action-content
+                .live-action-value 2
+                .live-action-name Name gesagt
+            .live-action.live-drink
+              .live-action-minus -
+              .live-action-plus +
+              .live-action-content
+                .live-action-value 2
+                .live-action-name Name gesagt
+            .live-action.live-drink
+              .live-action-minus -
+              .live-action-plus +
+              .live-action-content
+                .live-action-value 2
+                .live-action-name Name gesagt
+            .live-action.live-drink
+              .live-action-minus -
+              .live-action-plus +
+              .live-action-content
+                .live-action-value 2
+                .live-action-name Name gesagt
+    script(type='text/javascript', src='/dist/js/' + pkg.name + '.' + pkg.version + '.min.js')

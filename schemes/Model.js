@@ -24,9 +24,13 @@ var schema = new Schema({
     default: Date.now
   },
 
-  firstname: {
+  displayname: {
     type: String,
     required: true
+  },
+
+  firstname: {
+    type: String
   },
 
   lastname: {
@@ -41,8 +45,8 @@ var schema = new Schema({
     type: String
   },
 
-  birthday: {
-    type: Date
+  age: {
+    type: Number
   },
 
   height: {

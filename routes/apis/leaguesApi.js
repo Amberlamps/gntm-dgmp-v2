@@ -6,7 +6,7 @@
 var express = require('express');
 var router = express.Router();
 var League = require('schemes').League;
-var authentication = require('routes/middleware').authentication;
+var authentication = require('middleware').authentication;
 var validation = require('middleware').validation;
 var patchLeaguesValidation = require('validations').patchLeaguesValidation;
 var postLeaguesValidation = require('validations').postLeaguesValidation;
@@ -30,7 +30,7 @@ router.get('/',
 // POST
 router.post('/',
   authentication(),
-  validation(postLeaguesValidation)
+  validation(postLeaguesValidation),
   postLeagues);
 
 // PUT

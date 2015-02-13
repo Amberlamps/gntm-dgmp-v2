@@ -5,7 +5,7 @@
  */
 var express = require('express');
 var router = express.Router();
-var authentication = require('routes/middleware').authentication;
+var authentication = require('middleware').authentication;
 var validation = require('middleware').validation;
 var patchMembershipsValidation = require('validations').patchMembershipsValidation;
 var postMembershipsValidation = require('validations').postMembershipsValidation;
@@ -25,7 +25,7 @@ router.get('/:leagueId',
 // POST
 router.post('/',
   authentication(),
-  validation(postMembershipsValidation)
+  validation(postMembershipsValidation),
   postMemberships);
 
 // PUT
@@ -96,7 +96,7 @@ function postMemberships(req, res, next) {
     }
 
     if (membership) {
-      var error {};
+      var error = {};
       if (membership.status === 'granted') {
         error = new Error('You are already member of that league.');
       } else if (membership.status === 'requested') {

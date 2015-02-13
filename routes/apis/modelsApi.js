@@ -6,7 +6,7 @@
 var express = require('express');
 var router = express.Router();
 var Model = require('schemes').Model;
-var authentication = require('routes/middleware').authentication;
+var authentication = require('middleware').authentication;
 var validation = require('middleware').validation;
 var patchModelsValidation = require('validations').patchModelsValidation;
 var postModelsValidation = require('validations').postModelsValidation;
@@ -24,30 +24,30 @@ router.get('/:modelId',
 
 // GET
 router.get('/',
-  authentication(),
+  //authentication(),
   getModels);
 
 // POST
 router.post('/',
-  authentication('admin'),
-  validation(postModelsValidation)
+  //authentication('admin'),
+  validation(postModelsValidation),
   postModels);
 
 // PUT
 router.put('/:modelId',
-  authentication('admin'),
+  //authentication('admin'),
   validation(putModelsValidation),
   putModels);
 
 // PATCH
 router.patch('/:modelId',
-  authentication('admin'),
+  //authentication('admin'),
   validation(patchModelsValidation),
   patchModels)
 
 // DELETE
 router.delete('/:modelId',
-  authentication('admin'),
+  //authentication('admin'),
   deleteModels);
 
 /**

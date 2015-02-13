@@ -6,7 +6,7 @@
 var express = require('express');
 var router = express.Router();
 var Rulebook = require('schemes').Rulebook;
-var authentication = require('routes/middleware').authentication;
+var authentication = require('middleware').authentication;
 var validation = require('middleware').validation;
 var patchRulebooksValidation = require('validations').patchRulebooksValidation;
 var postRulebooksValidation = require('validations').postRulebooksValidation;
@@ -57,7 +57,7 @@ router.get('/',
 // POST
 router.post('/',
   authentication(),
-  validation(postRulebooksValidation)
+  validation(postRulebooksValidation),
   postRulebooks);
 
 // PUT

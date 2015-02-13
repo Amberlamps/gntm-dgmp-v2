@@ -78,7 +78,7 @@ function getUser(req, res, next) {
 
 }
 
-function getUser(req, res, next) {
+function getUsers(req, res, next) {
 
   User.find({}).exec(gotUsers);
 

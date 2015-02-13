@@ -19,7 +19,7 @@ var usersApi = require('routes/apis/').usersApi;
 /**
  * MIDDLEWARE.
  */
-router.use('/:version', function(req, res, next) {
+router.use('/:version', function validateVersionNumber(req, res, next) {
   next();
 });
 
