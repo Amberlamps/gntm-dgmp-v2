@@ -6,7 +6,7 @@
  */
 function authenticate(roles) {
   roles = roles || [];
-  if (!Object.prototype.toString.call(roles) !== '[object Array]') {
+  if (Object.prototype.toString.call(roles) !== '[object Array]') {
     roles = [roles];
   }
   return authenticateMiddleware.bind(null, roles);

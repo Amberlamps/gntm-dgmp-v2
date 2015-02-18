@@ -14,13 +14,13 @@ html
   body
     .livepage
       .live-girls
-        each girl in models
+        each girl in playday.models
           .live-girl-container
-            .live-girl(style="background-image: url('/images/" + girl.pictureFace + "')")
-              .live-girl-name= girl.displayname
+            .live-girl(style="background-image: url('/images/" + girl.model.pictureFace + "')", data-modelId=girl.model.id)
+              .live-girl-name= girl.model.displayname
               .live-girl-stats
-                .live-girl-stats-drinks 0
-                .live-girl-stats-jobs 0
+                .live-girl-stats-drinks= girl.gulps
+                .live-girl-stats-jobs= girl.jobs
         .live-girl-container
           .live-all
       .live-statistics
@@ -69,34 +69,21 @@ html
                 .live-girl-stats-jobs
         .live-closeup-actions
           .live-closeup-actions-container
-            .live-action.live-drink
-              .live-action-minus -
-              .live-action-plus +
-              .live-action-content
-                .live-action-value 2
-                .live-action-name Name gesagt
-            .live-action.live-drink
-              .live-action-minus -
-              .live-action-plus +
-              .live-action-content
-                .live-action-value 2
-                .live-action-name Name gesagt
-            .live-action.live-drink
-              .live-action-minus -
-              .live-action-plus +
-              .live-action-content
-                .live-action-value 2
-                .live-action-name Name gesagt
-            .live-action.live-drink
-              .live-action-minus -
-              .live-action-plus +
-              .live-action-content
-                .live-action-value 2
-                .live-action-name Name gesagt
-            .live-action.live-drink
-              .live-action-minus -
-              .live-action-plus +
-              .live-action-content
-                .live-action-value 2
-                .live-action-name Name gesagt
+            .live-closeup-rule-headline.live-closeup-rule-drinks Schlücke
+            each drinkingRule in playday.rulebook.drinkingRules
+              - if (drinkingRule.target === 'manager')
+                .live-action.live-drink
+                  .live-action-minus
+                  .live-action-plus
+                  .live-action-content
+                    .live-action-value= drinkingRule.gulps
+                    .live-action-name= drinkingRule.name
+            .live-closeup-rule-headline.live-closeup-rule-jobs Jobs
+            each jobRule in playday.rulebook.jobRules
+              .live-action.live-job
+                .live-action-minus
+                .live-action-plus
+                .live-action-content
+                  .live-action-value= jobRule.gulps
+                  .live-action-name= jobRule.name
     script(type='text/javascript', src='/dist/js/' + pkg.name + '.' + pkg.version + '.min.js')

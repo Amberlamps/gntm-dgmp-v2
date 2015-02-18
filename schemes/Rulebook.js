@@ -29,6 +29,12 @@ var schema = new Schema({
     default: Date.now
   },
 
+  active: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+
   league: {
     type: Schema.ObjectId,
     ref: 'League',
@@ -37,33 +43,50 @@ var schema = new Schema({
 
   name: {
     type: String,
-    required: true
+    required: true,
+    default: 'Rulebook Draft 1.0'
   },
 
-  drinkingRules: [{
-    _id: false,
-    name: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String
-    },
-    target: {
-      type: String,
-      required: true,
-      default: 'all'
-    },
-    gulps: {
-      type: Number,
-      required: true,
-      default: 1
-    }
-  }],
+  jobRules: {
+    type: Array,
+    required: true,
+    default: [{
+      name: 'Mädchen hat einen Job bekommen',
+      description: 'Getrunken wird, wenn das Mädchen einen Job bekommen hat.',
+      jobs: 1
+    }]
+  },
+
+  drinkingRules: {
+    type: Array,
+    required: true,
+    default: [{
+      name: 'Name gesagt',
+      description: 'Getrunken wird, wenn der Name eines Models genannt wird.',
+      target: 'manager',
+      gulps: 1
+    }, {
+      name: 'Name geschrieben',
+      description: 'Getrunken wird, wenn der Name eines Models irgendwo geschrieben steht.',
+      target: 'manager',
+      gulps: 2
+    }, {
+      name: 'Model weint',
+      description: 'Getrunken wird, wenn ein Model weint.',
+      target: 'manager',
+      gulps: 5
+    }, {
+      name: 'Mädchen/Chicas gesagt',
+      description: 'Getrunken wird, wenn "Mädchen" in irgendeiner Sprache genannt wird.',
+      target: 'alle',
+      gulps: 1
+    }]
+  },
 
   drinkingDistribution: {
     type: Array,
-    required: true
+    required: true,
+    default: [5, 4, 3, 2, 1]
   }
 
 }, {

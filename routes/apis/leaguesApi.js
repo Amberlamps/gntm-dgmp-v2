@@ -12,6 +12,7 @@ var patchLeaguesValidation = require('validations').patchLeaguesValidation;
 var postLeaguesValidation = require('validations').postLeaguesValidation;
 var putLeaguesValidation = require('validations').putLeaguesValidation;
 var Membership = require('schemes').Membership;
+var Rulebook = require('schemes').Rulebook;
 
 
 /**
@@ -142,7 +143,24 @@ function postLeagues(req, res, next) {
       status: 'granted'
     });
 
-    membership.save(function savedMembership(err, membership) {
+    membership.save(savedMembership);
+
+    function savedMembership(err, membership) {
+
+      if (err) {
+        return next(err);
+      }
+
+      var rulebook = new Rulebook({
+        league: league.id,
+        active: true
+      });
+
+      rulebook.save(savedRulebook);
+
+    }
+
+    function savedRulebook(err, rulebook) {
 
       if (err) {
         return next(err);
@@ -152,7 +170,7 @@ function postLeagues(req, res, next) {
         league: league
       });
 
-    });
+    }
 
   }
 

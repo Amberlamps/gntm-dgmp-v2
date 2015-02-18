@@ -10,6 +10,10 @@ module.exports.patchModelsValidation = require('./patchModelsValidation.js');
 module.exports.postModelsValidation = require('./postModelsValidation.js');
 module.exports.putModelsValidation = require('./putModelsValidation.js');
 
+module.exports.patchPlaydaysValidation = require('./patchPlaydaysValidation.js');
+module.exports.postPlaydaysValidation = require('./postPlaydaysValidation.js');
+module.exports.putPlaydaysValidation = require('./putPlaydaysValidation.js');
+
 module.exports.patchRulebooksValidation = require('./patchRulebooksValidation.js');
 module.exports.postRulebooksValidation = require('./postRulebooksValidation.js');
 module.exports.putRulebooksValidation = require('./putRulebooksValidation.js');

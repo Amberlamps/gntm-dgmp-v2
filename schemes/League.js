@@ -40,6 +40,18 @@ var schema = new Schema({
     required: true
   },
 
+  playdays: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+
+  members: {
+    type: Number,
+    required: true,
+    default: 1
+  },
+
   motto: {
     type: String
   }

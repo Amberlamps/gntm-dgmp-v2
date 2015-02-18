@@ -16,28 +16,6 @@ var putRulebooksValidation = require('validations').putRulebooksValidation;
 /**
  * VARIABLES.
  */
-var defaultDrinkingRules = [{
-  name: 'Name gesagt',
-  description: 'Getrunken wird, wenn der Name eines Models genannt wird',
-  target: 'manager',
-  gulps: 1
-}, {
-  name: 'Name geschrieben',
-  description: 'Getrunken wird, wenn der Name eines Models irgendwo geschrieben steht.',
-  target: 'manager',
-  gulps: 2
-}, {
-  name: 'Model weint',
-  description: 'Getrunken wird, wenn ein Model weint.',
-  target: 'manager',
-  gulps: 5
-}, {
-  name: 'Mädchen/Chicas gesagt',
-  description: 'Getrunken wird, wenn "Mädchen" in irgendeiner Sprache genannt wird.',
-  target: 'alle',
-  gulps: 1
-}];
-var defaultDrinkingDistribution = [5, 4, 3, 2, 1];
 
 
 /**
@@ -126,9 +104,6 @@ function getRulebooks(req, res, next) {
 function postRulebooks(req, res, next) {
 
   var params = req.body;
-
-  params.drinkingRules = params.drinkingRules || defaultDrinkingRules;
-  params.drinkingDistribution = params.drinkingDistribution || defaultDrinkingDistribution;
 
   var rulebook = new Rulebook(params);
 

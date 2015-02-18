@@ -10,4 +10,18 @@ block content
           h1 Die Models
           h2 Eine Übersicht aller Models.
   .center
-    .page-models Models
+    .page-models
+      .list
+        .list-row.list-handles
+          .list-column.list-handle.models-list-handle(data-sortname='displayname', data-sortorder='desc', data-type='string') Model
+          .list-column.list-handle.models-list-handle.models-list-column-small(data-sortname='age', data-sortorder='desc', data-type='number') Alter
+          .list-column.list-handle.models-list-handle.models-list-column-small(data-sortname='drinks', data-sortorder='desc', data-type='number') Schlücke
+          .list-column.list-handle.models-list-handle.models-list-column-small(data-sortname='jobs', data-sortorder='desc', data-type='number') Jobs
+          .list-column.list-handle.models-list-handle.models-list-column-small(data-sortname='eliminated', data-sortorder='desc', data-type='date') Ausgeschieden
+        each model in models
+          .list-row.list-item.model-list-item(data-displayname=model.displayname, data-age=model.age, data-drinks=model.drinks, data-jobs=model.jobs, data-eliminated=(model.eliminated) ? model.eliminated.toString() : false)
+            .list-column.models-list-column.model-list-displayname(style='background-image: url(/images/' + model.pictureFace + ')')= model.displayname
+            .list-column.models-list-column.models-list-column-small= model.age
+            .list-column.models-list-column.models-list-column-small= model.drinks
+            .list-column.models-list-column.models-list-column-small= model.jobs
+            .list-column.models-list-column.models-list-column-small= (model.eliminated) ? moment(model.eliminated).format('DD.MM.') : ''

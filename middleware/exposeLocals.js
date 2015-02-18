@@ -9,6 +9,7 @@
  * MODULES.
  */
 var pkg = require('package.json');
+var moment = require('moment');
 
 
 /**
@@ -23,6 +24,7 @@ function exposeLocalsWrapper(app) {
     app.locals.pkg = pkg;
     app.locals.xhr = req.xhr;
     app.locals.user = req.session.user || {};
+    app.locals.moment = moment;
     next();
   };
 

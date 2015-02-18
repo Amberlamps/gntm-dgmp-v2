@@ -11,11 +11,16 @@ block content
           h2 Übersicht aller registrierten Spielverbände und Ligen
   .center
     .page-leagues
-      a(href='/leagues/add').button-confirm.page-leagues-new Neue Liga gründen
-      ul.page-leagues-list
-        li
-          .column.page-leagues-column Name
+      .list
+        .list-row.list-handles
+          .list-column.list-handle.leagues-list-handle(data-sortname='name', data-sortorder='desc', data-type='string') Liga
+          .list-column.list-handle.leagues-list-handle.leagues-list-column-small(data-sortname='members', data-sortorder='desc', data-type='number') Mitglieder
+          .list-column.list-handle.leagues-list-handle.leagues-list-column-small(data-sortname='playdays', data-sortorder='desc', data-type='number') Spieltage
+          .list-column.list-handle.leagues-list-handle.leagues-list-column-small(data-sortname='founded', data-sortorder='desc', data-type='date') Gegründet
         each league in leagues
-          li
-            a.page-leagues-list-item(href='/leagues/' + league._id)
-              .column= league.name
+          .list-row.list-item.league-list-item(data-name=league.name, data-members=league.members, data-playdays=league.playdays, data-founded=league._createdOn.toString())
+            .list-column.leagues-list-column
+              a(href='/leagues/' + league.id)= league.name
+            .list-column.leagues-list-column.leagues-list-column-small= league.members
+            .list-column.leagues-list-column.leagues-list-column-small= league.playdays
+            .list-column.leagues-list-column.leagues-list-column-small= moment(league._createdOn).format('DD.MM.')
