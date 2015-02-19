@@ -13,6 +13,10 @@ if (!xhr)
       script(type='text/javascript', src='/components/sweetalert/lib/sweet-alert.min.js')
       script(type='text/javascript', src='/components/nprogress/nprogress.js')
       script(type='text/javascript', src='/components/draggabilly/dist/draggabilly.pkgd.js')
-    body Version 2.0 kommt mit leichter Verspätung!
+    body
+      //include modules/header
+      .mainpage
+        block content
+      script(type='text/javascript', src='/dist/js/' + pkg.name + '.' + pkg.version + '.min.js')
 else
   block content
