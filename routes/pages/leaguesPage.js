@@ -14,7 +14,8 @@ var Membership = require('schemes').Membership;
  */
 var ALLOWED_PAGES = {
   index: 1,
-  members: 1
+  members: 1,
+  roaster: 1
 };
 
 
@@ -36,17 +37,28 @@ router.route('/')
  */
 function getLeaguesPage(req, res, next) {
 
-  League.find({}).sort({ sortname: 1 }).exec(writeResponse);
+  League.find({}).sort({ sortname: 1 }).exec(checkIfMember);
 
-  function writeResponse(err, leagues) {
+  function checkIfMember(err, leagues) {
 
-    if (err) {
-      return next(err);
+    var selector = {
+      member: req.session.user.id
+    };
+
+    Membership.findOne(selector, writeResponse);
+
+    function writeResponse(err, membership) {
+
+      if (err) {
+        return next(err);
+      }
+
+      res.render('pages/leagues', {
+        leagues: leagues,
+        canCreateLeague: !Boolean(membership)
+      });
+
     }
-
-    res.render('pages/leagues', {
-      leagues: leagues
-    });
 
   }
 
@@ -81,13 +93,36 @@ function getLeaguePage(req, res, next) {
       return getMembersPage(league);
     }
 
+    if (page === 'roaster') {
+      return getRoasterPage(league);
+    }
+
   }
 
   function getIndexPage(league) {
-    res.render('pages/league/index', {
-      league: league,
-      page: page
-    });
+
+    var selector = {
+      member: req.session.user.id
+    };
+
+    Membership.findOne(selector, foundMembership);
+
+    function foundMembership(err, membership) {
+
+      if (err) {
+        return next(err);
+      }
+
+      var hasLeague = Boolean(membership);
+
+      res.render('pages/league/index', {
+        league: league,
+        page: page,
+        isWithoutLeague: !hasLeague
+      });
+
+    }
+
   }
 
   function getMembersPage(league) {
@@ -104,13 +139,27 @@ function getLeaguePage(req, res, next) {
         return next(err);
       }
 
+      var isAdmin = members.filter(function(member) {
+        return member.member.id === req.session.user.id && member.role === 'admin';
+      });
+
       res.render('pages/league/members', {
         league: league,
         members: members,
-        page: page
+        page: page,
+        isAdmin: isAdmin.length === 1
       });
 
     }
+
+  }
+
+  function getRoasterPage(league) {
+
+    res.render('pages/league/roaster', {
+      league: league,
+      page: page
+    });
 
   }
 

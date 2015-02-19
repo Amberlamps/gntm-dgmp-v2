@@ -11,6 +11,8 @@ block content
           h2 Übersicht aller registrierten Spielverbände und Ligen
   .center
     .page-leagues
+      - if (canCreateLeague)
+        a.button-confirm.leagues-create(href='/leagues/add') Neue Liga gründen
       .list
         .list-row.list-handles
           .list-column.list-handle.leagues-list-handle(data-sortname='name', data-sortorder='desc', data-type='string') Liga

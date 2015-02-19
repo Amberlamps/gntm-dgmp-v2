@@ -10,6 +10,7 @@ var validation = require('middleware').validation;
 var patchMembershipsValidation = require('validations').patchMembershipsValidation;
 var postMembershipsValidation = require('validations').postMembershipsValidation;
 var putMembershipsValidation = require('validations').putMembershipsValidation;
+var League = require('schemes').League;
 var Membership = require('schemes').Membership;
 
 
@@ -76,11 +77,11 @@ function getMemberships(req, res, next) {
 function postMemberships(req, res, next) {
 
   var params = req.body;
-  params.member = req.session.user._id;
+  params.member = req.session.user.id;
 
   var selector = {
     member: params.member,
-    league: params.leagueId
+    league: params.league
   };
 
   Membership.findOne(selector, foundMembership);
@@ -146,7 +147,7 @@ function patchMemberships(req, res, next) {
       return next(err);
     }
 
-    if (membership.status !== 'admin') {
+    if (membership.role !== 'admin') {
       var error = new Error('You are not allowed to update membership.');
       error.status = 403;
       return next(error);
@@ -157,6 +158,8 @@ function patchMemberships(req, res, next) {
     var selector = {
       _id: membershipId
     };
+
+    updates._modifiedOn = Date.now();
 
     var data = {
       $set: updates,
@@ -175,9 +178,50 @@ function patchMemberships(req, res, next) {
       return next(err);
     }
 
-    res.json({
-      updated: updated
-    });
+    countMembers(updates.leagueId, writeResponse);
+
+    function writeResponse(err, updated) {
+
+      if (err) {
+        return next(err);
+      }
+
+      res.json({
+        updated: updated
+      });
+
+    }
+
+  }
+
+}
+
+function countMembers(leagueId, callback) {
+
+  var selector = {
+    league: leagueId,
+    status: 'granted'
+  };
+
+  Membership.find(selector, updateLeague);
+
+  function updateLeague(err, memberships) {
+
+    if (err) {
+      return callback(err);
+    }
+
+    var selector = {
+      _id: leagueId
+    };
+
+    var data = {
+      $set: {
+        members: memberships.length
+      }
+    };
+
+    League.update(selector, data, callback);
 
   }
 
@@ -186,35 +230,42 @@ function patchMemberships(req, res, next) {
 function deleteMemberships(req, res, next) {
 
   var membershipId = req.params.membershipId;
+  var leagueId = req.body.leagueId;
 
   var selector = {
-    _id: membershipId
+    $or: [{
+      member: req.session.user.id,
+      league: leagueId,
+      role: 'admin'
+    }, {
+      _id: membershipId,
+      member: req.session.user.id,
+      league: leagueId      
+    }]
   };
 
-  Membership.findOne(selector, foundMembership);
+  Membership.findOne(selector, checkPermission);
 
-  function foundMembership(err, membership) {
+  function checkPermission(err, membership) {
 
     if (err) {
       return next(err);
     }
 
     if (!membership) {
-      var error = new Error('Membership Id not found.');
-      error.status = 400;
-      return next(error);
-    }
-
-    if (membership.member !== req.session.user.id) {
       var error = new Error('You are not allowed to delete membership.');
       error.status = 400;
-      return next(error);
+      return next(error);      
     }
+
+    var selector = {
+      _id: membershipId,
+      league: leagueId
+    };
 
     Membership.remove(selector, removedMembership);
 
   }
-
 
   function removedMembership(err, deleted) {
 
@@ -222,9 +273,19 @@ function deleteMemberships(req, res, next) {
       return next(err);
     }
 
-    res.json({
-      deleted: deleted
-    });
+    countMembers(leagueId, writeResponse);
+
+    function writeResponse(err, updated) {
+
+      if (err) {
+        return next(err);
+      }
+
+      res.json({
+        deleted: deleted
+      });
+
+    }
 
   }
 

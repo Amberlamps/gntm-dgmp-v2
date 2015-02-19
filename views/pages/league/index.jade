@@ -1,6 +1,7 @@
 extends ../league.jade
 
 block page
-  form(action='/memberships', method='post', data-action='/memberships', data-method='post', name='enterLeague')
-    input(type='hidden', name='league', value=league.id)
-    input(type='submit', value='Liga beitreten')
+  - if (isWithoutLeague)
+    form(action='/memberships', method='post', data-action='/memberships', data-method='post', name='enterLeague')
+      input(type='hidden', name='league', value=league.id)
+      input(type='submit', value='Liga beitreten')

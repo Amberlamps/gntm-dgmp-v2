@@ -24,6 +24,11 @@ var schema = new Schema({
     default: Date.now
   },
 
+  _modifiedOn: {
+    type: Date,
+    default: Date.now
+  },
+
   member: {
     type: Schema.ObjectId,
     ref: 'User',

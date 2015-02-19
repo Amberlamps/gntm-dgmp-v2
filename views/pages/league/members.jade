@@ -1,13 +1,28 @@
 extends ../league.jade
 
 block page
-  ul
+  .list
+    .list-row.list-handles
+      .list-column.list-handle.league-list-handle(data-sortname='displayname', data-sortorder='desc', data-type='string') Name
+      .list-column.list-handle.league-list-handle
     each member in members
-      li
-        span= member.member.name
-        - if (member.status === 'requested')
-          form(action='/memberships/' + member.id, method='patch', data-action='/memberships/' + member.id, data-method='patch', name='confirmMember')
-            input(type='hidden', name='status', value='granted')
-            input(type='submit', value='Bestätigen')
-          form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='deleteMember')
-            input(type='submit', value='Ablehnen')
+      .list-row.list-item.member-list-item(data-displayname=member.displayname, data-league=league.id, data-memberId=member.id, data-member=(member._modifiedOn || member._createdOn))
+        - if (member.member.id === user.id || member.status === 'granted' || (isAdmin && member.status === 'requested'))
+          .list-column.league-list-column= member.member.name
+          .list-column.league-list-column
+            - if (isAdmin && member.status === 'requested')
+              form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='denyMember')
+                input(type='hidden', name='leagueId', value=league.id)
+                .league-member-action.league-member-deny.submit-substitute(data-form='denyMember') Ablehnen
+              form(action='/memberships/' + member.id, method='patch', data-action='/memberships/' + member.id, data-method='patch', name='confirmMember')
+                input(type='hidden', name='leagueId', value=league.id)
+                input(type='hidden', name='status', value='granted')
+                .league-member-action.league-member-confirm.submit-substitute(data-form='confirmMember') Bestätigen
+            - else if (isAdmin && member.member.id !== user.id)
+              form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='deleteMember')
+                input(type='hidden', name='leagueId', value=league.id)
+                .league-member-action.league-member-delete.submit-substitute(data-form='deleteMember') Löschen
+            - else if (member.member.id === user.id && member.status === "requested")
+              form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='cancelSubscription')
+                input(type='hidden', name='leagueId', value=league.id)
+                .league-member-action.league-member-delete.submit-substitute(data-form='cancelSubscription') Antrag zurückziehen
