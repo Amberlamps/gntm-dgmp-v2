@@ -1,0 +1,19 @@
+extends ../league.jade
+
+block page
+  a.button-confirm(href='/leagues/' + league.id + '/playdays/new') Neuen Spieltag erstellen
+  .page-headline Spieltage
+  .list.playdays-list
+    .list-row.list-handles
+      .list-column.list-handle.playdays-list-handle Spieltag
+      .list-column.list-handle.playdays-list-handle.playdays-list-column-small(data-sortname='startDate', data-sortorder='desc', data-type='date') Datum
+      .list-column.list-handle.playdays-list-handle.playdays-list-column-small
+    each playday, index in playdays
+      .list-row.list-item.league-list-item(data-startDate=playday._createdOn.toString())
+        .list-column.playdays-list-column= 'Spieltag ' + (index+1)
+        .list-column.playdays-list-column.playdays-list-column-small= moment(playday.startDate).format('DD.MM.')
+        .list-column.playdays-list-column.playdays-list-column-small
+          a.playdays-list-column-edit(href='/leagues/' + league.id + '/playdays/' + playday.id) Edit
+          form(action='/playdays/' + playday.id, method='delete', data-action='/playdays/' + playday.id, data-method='delete', name='deletePlayday')
+            input(type='hidden', name='playdayId', value=playday.id)
+            .submit-substitute.playdays-list-column-delete Löschen

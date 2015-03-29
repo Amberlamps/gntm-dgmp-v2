@@ -1,32 +1,35 @@
 extends ../league.jade
 
 block page
-  .roaster
-    .roaster-header
-      .roaster-name Philli
-    .roaster-container
-      .roaster-girl
-      .roaster-girl
-      .roaster-girl
-      .roaster-girl
-  .roaster
-    .roaster-header
-      .roaster-name Daniel
-    .roaster-container
-      .roaster-girl
-      .roaster-girl
-      .roaster-girl
-      .roaster-girl
-  .roaster
-    .roaster-header
-      .roaster-name Silvan
-    .roaster-container
-      .roaster-girl
-      .roaster-girl
-      .roaster-girl
-      .roaster-girl
-  .roaster-overlay
-  .roaster-overlay-menu
-    .roaster-overlay-category.roaster-manager Philli
-    .roaster-overlay-category.roaster-manager Daniel
-    .roaster-overlay-category.roaster-freeagent Free Agent Market
+  each member in members
+    .roaster(data-member=member.member.id)
+      .roaster-header.roaster-name= member.member.name
+      .roaster-container
+        - if (member.member.roaster && member.member.roaster.length !== 0)
+          //.roaster-nocontent(style="display: none") Der Roaster ist leer
+        - else
+          //.roaster-nocontent Der Roaster ist leer
+        each model in models
+          - if (member.member.roaster && member.member.roaster.indexOf(model.id) !== -1)
+            .roaster-girl-container
+              .roaster-girl(data-modelId=model.id, data-displayname=model.displayname, data-eliminated=model.eliminated)
+                .roaster-girl-picture(style='background-image:url(/images/' + model.pictureFace + ')')
+                .roaster-girl-name= model.displayname
+        .roaster-divider
+  - if (isAdmin)
+    .roaster(data-member='market')
+      .roaster-header.roaster-market Market
+      .roaster-container
+        - var remainingModels = Array.prototype.concat.apply([], members.map(function(member) { return member.member.roaster; }))
+          each model in models
+            - if (remainingModels.indexOf(model.id) === -1)
+              .roaster-girl-container
+                .roaster-girl(data-modelId=model.id, data-displayname=model.displayname, data-eliminated=model.eliminated)
+                  .roaster-girl-picture(style='background-image:url(/images/' + model.pictureFace + ')')
+                  .roaster-girl-name= model.displayname
+          .roaster-divider
+    .roaster-overlay
+    .roaster-overlay-menu
+      each member in members
+        .roaster-overlay-category.roaster-manager(data-member=member.member.id)= member.member.name
+      .roaster-overlay-category.roaster-freeagent(data-member='market') Market

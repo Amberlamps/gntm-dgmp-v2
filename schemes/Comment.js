@@ -1,0 +1,68 @@
+/**
+ * Schema for comment.
+ *
+ * User: Alexander Behrens <alexander.behrens.84@gmail.com>
+ */
+
+'use strict';
+
+
+/**
+ * MODULES.
+ */
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+
+/**
+ * VARIABLES.
+ */
+var schema = new Schema({
+
+  _createdOn: {
+    type: Date,
+    default: Date.now
+  },
+
+  _modifiedOn: {
+    type: Date
+  },
+
+  member: {
+    type: Schema.ObjectId,
+    ref: 'User',
+    required: true
+  },
+
+  league: {
+    type: Schema.ObjectId,
+    ref: 'League',
+    required: true
+  },
+
+  post: {
+    type: Schema.ObjectId,
+    ref: 'Post',
+    required: true
+  },
+
+  comment: {
+    type: String,
+    required: true
+  }
+
+}, {
+  toObject: {
+    virtuals: true
+  },
+  toJSON: {
+    virtuals: true
+  }
+});
+
+
+/**
+ * EXPORTS.
+ */
+mongoose.model('Comment', schema);
+module.exports = mongoose.model('Comment');

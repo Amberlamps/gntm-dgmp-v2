@@ -30,7 +30,7 @@ var sessionHandler = session({
   store: new RedisStore({
     client: redisClient
   }),
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   secret: 'gntm-dgmp ftw',
   cookie: {

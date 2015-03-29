@@ -20,7 +20,7 @@ router.route('/')
  */
 function getModelsPage(req, res, next) {
 
-  Model.find({}).sort({ eliminated: -1, displayname: 1}).exec(renderModels);
+  Model.find({}).sort({ eliminated: 1, displayname: 1}).exec(renderModels);
 
   function renderModels(err, models) {
 

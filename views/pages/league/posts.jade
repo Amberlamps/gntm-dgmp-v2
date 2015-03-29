@@ -1,0 +1,25 @@
+extends ../league.jade
+
+block page
+  a.button-confirm(href='/leagues/' + league.id + '/posts/new') Neuen Beitrag erstellen
+  .page-headline Beiträge
+  .list.posts-list
+    .list-row.list-handles
+      .list-column.list-handle.posts-list-handle(data-sortname='title', data-sortorder='desc', data-type='string') Titel
+      .list-column.list-handle.posts-list-handle.posts-list-column-small(data-sortname='author', data-sortorder='desc', data-type='string') Autor
+      .list-column.list-handle.posts-list-handle.posts-list-column-small(data-sortname='comments', data-sortorder='desc', data-type='number') Kommentare
+      .list-column.list-handle.posts-list-handle.posts-list-column-small(data-sortname='created', data-sortorder='desc', data-type='date') Verfasst
+      .list-column.list-handle.posts-list-handle.posts-list-column-small
+    each post in posts
+      .list-row.list-item.league-list-item(data-title=post.title, data-author=post.member.name, data-comments=post.comments, data-created=post._createdOn.toString())
+        .list-column.posts-list-column
+          a(href='/leagues/' + league.id + '/index/' + post.id)= post.title
+        .list-column.posts-list-column.posts-list-column-small= post.member.name
+        .list-column.posts-list-column.posts-list-column-small= post.comments
+        .list-column.posts-list-column.posts-list-column-small= moment(post._createdOn).format('DD.MM.')
+        .list-column.posts-list-column.posts-list-column-small
+          a.posts-list-column-edit(href='/leagues/' + league.id + '/posts/' + post.id) Edit
+          form(action='/posts/' + post.id, method='delete', data-action='/posts/' + post.id, data-method='delete', name='deletePost')
+            input(type='hidden', name='postId', value=post.id)
+            .submit-substitute.posts-list-column-delete Löschen
+  

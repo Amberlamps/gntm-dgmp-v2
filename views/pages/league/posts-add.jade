@@ -1,0 +1,33 @@
+extends ../league.jade
+
+block page
+  form(action=((post.id) ? '/posts/' + post.id : '/posts'), method=((post.id) ? 'patch' : 'post'), data-action=((post.id) ? '/posts/' + post.id : '/posts'), data-method=((post.id) ? 'patch' : 'post'), name=((post.id) ? 'editPost' : 'createPost'))
+    input(type='hidden', name='league', value=league.id)
+    .formular-section
+      .formular-section-headline.post-article Artikel erstellen
+      .formular-item
+        .formular-item-label
+          label(for='title') Titel
+        .formular-item-field
+          .formular-item-input
+            input(name='title', type='text', id='title', value=post.title)
+      .formular-item
+        .formular-item-label
+          label(for='post') Beitrag
+        .formular-item-field
+          .formular-item-input
+            textarea(name='post', id='post')= post.post
+      .formular-item
+        .formular-item-label
+          label Icon
+        .formular-item-field
+          input(type='radio', name='icon', value='news', id='news', checked=(post.icon === 'news'))
+          label.formular-item-icon(for='news')
+          input(type='radio', name='icon', value='trophy', id='trophy', checked=(post.icon === 'trophy'))
+          label.formular-item-icon(for='trophy')
+          input(type='radio', name='icon', value='birthday', id='birthday', checked=(post.icon === 'birthday'))
+          label.formular-item-icon(for='birthday')
+          input(type='radio', name='icon', value='glass', id='glass', checked=(post.icon === 'glass'))
+          label.formular-item-icon(for='glass')
+    .formular-buttons
+      input(type='submit', value=((post.id) ? 'Beitrag bearbeiten' : 'Beitrag erstellen'))

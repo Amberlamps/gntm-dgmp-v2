@@ -16,6 +16,8 @@ function errorHandler(err, req, res, next) {
 
   var status = err.status || 500;
 
+  console.log(err);
+
   var errorObject = {
     message: err.message,
     error: {

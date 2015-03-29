@@ -1,0 +1,15 @@
+extends ../league.jade
+
+block page
+  form(action=((playday.id) ? '/playdays/' + playday.id : '/playdays'), method=((playday.id) ? 'patch' : 'post'), data-action=((playday.id) ? '/playdays/' + playday.id : '/playdays'), data-method=((playday.id) ? 'patch' : 'post'), name=((playday.id) ? 'editPlayday' : 'createPlayday'))
+    input(type='hidden', name='league', value=league.id)
+    .formular-section
+      .formular-section-headline.playday-article Artikel erstellen
+      .formular-item
+        .formular-item-label
+          label(for='startDate') Datum
+        .formular-item-field
+          .formular-item-input
+            input(name='startDate', type='text', id='startDate', value=moment(playday.startDate).format('DD.MM.YYYY'))
+    .formular-buttons
+      input(type='submit', value=((playday.id) ? 'Spieltag bearbeiten' : 'Spieltag erstellen'))

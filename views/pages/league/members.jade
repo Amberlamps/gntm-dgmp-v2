@@ -21,8 +21,24 @@ block page
             - else if (isAdmin && member.member.id !== user.id)
               form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='deleteMember')
                 input(type='hidden', name='leagueId', value=league.id)
+                input(type='hidden', name='memberId', value=member.member.id)
                 .league-member-action.league-member-delete.submit-substitute(data-form='deleteMember') Löschen
+              - if (member.role !== 'admin')
+                form(action='/memberships/' + member.id, method='patch', data-action='/memberships/' + member.id, data-method='patch', name='promoteMember')
+                  input(type='hidden', name='leagueId', value=league.id)
+                  input(type='hidden', name='role', value='admin')
+                  .league-member-action.league-member-promote.submit-substitute(data-form='promoteMember') Zu Admin befördern
+              - else
+                form(action='/memberships/' + member.id, method='patch', data-action='/memberships/' + member.id, data-method='patch', name='degradeMember')
+                  input(type='hidden', name='leagueId', value=league.id)
+                  input(type='hidden', name='role', value='user')
+                  .league-member-action.league-member-degrade.submit-substitute(data-form='degradeMember') Adminrechte entziehen
             - else if (member.member.id === user.id && member.status === "requested")
               form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='cancelSubscription')
                 input(type='hidden', name='leagueId', value=league.id)
                 .league-member-action.league-member-delete.submit-substitute(data-form='cancelSubscription') Antrag zurückziehen
+            - else if (member.member.id === user.id && member.status === "granted")
+              form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='cancelMembership')
+                input(type='hidden', name='leagueId', value=league.id)
+                input(type='hidden', name='memberId', value=member.member.id)
+                .league-member-action.league-member-delete.submit-substitute(data-form='cancelMembership') Austreten

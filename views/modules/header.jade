@@ -12,8 +12,11 @@ header
             .user-widget-navigation
           input(type='checkbox', id='user-widget')
           .user-widget-navigation-list
+            - if (user.league)
+              a(href='/leagues/' + user.league).user-widget-navigation-list-item.user-widget-navigation-list-item-league Meine Liga
+            //a(href='/settings').user-widget-navigation-list-item.user-widget-navigation-list-item-settings Einstellungen
             a(href='/logout').user-widget-navigation-list-item.user-widget-navigation-list-item-logout Logout
       - else
-        a(href='/login') Login
+        a.links(href='/login') Login
         span or
-        a(href='/login') Register
+        a.links(href='/login') Register

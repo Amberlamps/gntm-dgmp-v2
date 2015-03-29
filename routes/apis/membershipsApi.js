@@ -10,8 +10,10 @@ var validation = require('middleware').validation;
 var patchMembershipsValidation = require('validations').patchMembershipsValidation;
 var postMembershipsValidation = require('validations').postMembershipsValidation;
 var putMembershipsValidation = require('validations').putMembershipsValidation;
+var events = require('routes/modules').events;
 var League = require('schemes').League;
 var Membership = require('schemes').Membership;
+var User = require('schemes').User;
 
 
 /**
@@ -178,19 +180,35 @@ function patchMemberships(req, res, next) {
       return next(err);
     }
 
-    countMembers(updates.leagueId, writeResponse);
+    countMembers(updates.leagueId, createEvent);
 
-    function writeResponse(err, updated) {
+  }
 
-      if (err) {
-        return next(err);
-      }
+  function createEvent(err, updated) {
 
-      res.json({
-        updated: updated
-      });
-
+    if (err) {
+      return next(err);
     }
+
+    if (updates.status !== 'granted') {
+      return writeResponse(err, updated);
+    }
+
+    events.create('member.new', {
+      membershipId: req.params.membershipId
+    }, writeResponse);
+
+  }
+
+  function writeResponse(err, updated) {
+
+    if (err) {
+      return next(err);
+    }
+
+    res.json({
+      updated: updated
+    });
 
   }
 
@@ -231,6 +249,7 @@ function deleteMemberships(req, res, next) {
 
   var membershipId = req.params.membershipId;
   var leagueId = req.body.leagueId;
+  var memberId = req.body.memberId;
 
   var selector = {
     $or: [{
@@ -258,34 +277,74 @@ function deleteMemberships(req, res, next) {
       return next(error);      
     }
 
-    var selector = {
-      _id: membershipId,
-      league: leagueId
-    };
-
-    Membership.remove(selector, removedMembership);
-
-  }
-
-  function removedMembership(err, deleted) {
-
-    if (err) {
-      return next(err);
+    if (!memberId) {
+      return removeMembership();
     }
 
-    countMembers(leagueId, writeResponse);
+    var selector = {
+      _id: memberId
+    };
 
-    function writeResponse(err, updated) {
+    var data = {
+      $set: {
+        roaster: []
+      }
+    };
+
+    User.update(selector, data, createEvent);
+
+    function createEvent(err, updated) {
 
       if (err) {
         return next(err);
       }
 
-      res.json({
-        deleted: deleted
-      });
+      if (membership.status !== 'granted') {
+        return removeMembership(err, updated);
+      }
+
+      events.create('member.delete', {
+        membershipId: membershipId
+      }, removeMembership);
 
     }
+
+    function removeMembership(err, updated) {
+
+      if (err) {
+        return next(err);
+      }
+
+      var selector = {
+        _id: membershipId,
+        league: leagueId
+      };
+
+      Membership.remove(selector, removedMembership);
+
+      function removedMembership(err, deleted) {
+
+        if (err) {
+          return next(err);
+        }
+
+        countMembers(leagueId, writeResponse);
+
+      }
+
+    }
+
+  }
+
+  function writeResponse(err, updated) {
+
+    if (err) {
+      return next(err);
+    }
+
+    res.json({
+      deleted: 1
+    });
 
   }
 

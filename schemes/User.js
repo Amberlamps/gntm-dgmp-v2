@@ -39,6 +39,12 @@ var schema = new Schema({
     required: true
   },
 
+  roaster: {
+    type: Array,
+    required: true,
+    default: []
+  },
+
   roles: {
     type: Array,
     default: ['user']

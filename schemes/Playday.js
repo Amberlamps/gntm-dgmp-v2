@@ -30,9 +30,9 @@ var schema = new Schema({
     required: true
   },
 
-  rulebook: {
+  member: {
     type: Schema.ObjectId,
-    ref: 'Rulebook',
+    ref: 'User',
     required: true
   },
 
@@ -41,6 +41,23 @@ var schema = new Schema({
       _id: false,
       type: Schema.ObjectId,
       ref: 'Model',
+      required: true 
+    },
+    gulps: {
+      type: Number,
+      default: 0
+    },
+    jobs: {
+      type: Number,
+      default: 0
+    }
+  }],
+
+  managers: [{
+    user: {
+      _id: false,
+      type: Schema.ObjectId,
+      ref: 'User',
       required: true 
     },
     gulps: {

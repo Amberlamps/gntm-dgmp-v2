@@ -13,6 +13,7 @@ var postLeaguesValidation = require('validations').postLeaguesValidation;
 var putLeaguesValidation = require('validations').putLeaguesValidation;
 var Membership = require('schemes').Membership;
 var Rulebook = require('schemes').Rulebook;
+var events = require('routes/modules').events;
 
 
 /**
@@ -161,6 +162,18 @@ function postLeagues(req, res, next) {
     }
 
     function savedRulebook(err, rulebook) {
+
+      if (err) {
+        return next(err);
+      }
+
+      events.create('league.new', {
+        leagueId: league.id
+      }, writeResponse);
+
+    }
+
+    function writeResponse(err, rulebook) {
 
       if (err) {
         return next(err);

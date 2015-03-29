@@ -1,7 +1,42 @@
 extends ../league.jade
 
 block page
-  - if (isWithoutLeague)
-    form(action='/memberships', method='post', data-action='/memberships', data-method='post', name='enterLeague')
-      input(type='hidden', name='league', value=league.id)
-      input(type='submit', value='Liga beitreten')
+  - if (post)
+    .leagues-post
+      .leagues-post-header(data-icon=post.icon)
+        .leagues-post-title= post.title
+        .leagues-post-meta!= 'verfasst von <b>' + post.member.name + '</b> am <b>' + moment(post._createdOn).format('DD.MM.') + '</b> um <b>' + moment(post._createdOn).format('HH:mm:ss') + ' Uhr</b>.'
+      .leagues-post-content!= post.post.replace(/\n/g, '<br />')
+      .leagues-post-footer
+        .leagues-post-navigation
+          a(href=(postNext) ? '/leagues/' + league.id + '/index/' + postNext : '#').leagues-post-navigation-arrow.leagues-post-navigation-next
+          .leagues-post-navigation-count= postPosition+1 + ' / ' + postCount
+          a(href=(postPrevious) ? '/leagues/' + league.id + '/index/' + postPrevious : '#').leagues-post-navigation-arrow.leagues-post-navigation-previous
+        .leagues-post-comments= post.comments + ' Kommentar(e)'
+    .leagues-comments
+      .leagues-comments-form
+        form(action='/comments', method='post', data-action='/comments', data-method='post', name='postComment')
+          input(type='hidden', name='league', value=league.id)
+          input(type='hidden', name='post', value=post.id)
+          .leagues-comments-comment
+            textarea(name='comment', placeholder='Schreibe einen Kommentar...')
+          input(type='submit', value='Kommentieren')
+      .comments-list
+        each comment in comments
+          .comments-list-item
+            .comments-list-info
+              != '<b>' + comment.member.name + '</b> von '
+              != '<b>' + comment.league.name + '</b> schrieb am '
+              != '<b>' + moment(comment._createdOn).format('DD.MM.') + '</b> um '
+              != '<b>' + moment(comment._createdOn).format('HH.mm.ss') + ' Uhr</b>:'
+            .comments-list-comment!= comment.comment.replace(/\n/g, '<br />')
+  .events-list
+    .events-header Neuigkeiten
+    each event in events
+      .events-item(data-type=event.key, data-url=eventKeys(event.key).url)
+        .events-date(title=event._createdOn)= moment(event._createdOn).fromNow()
+        .events-message
+          - if (eventKeys(event.key).url)
+            a(href=template(eventKeys(event.key).url, event.variables))!= template(eventKeys(event.key).message, event.variables)
+          - else
+            != template(eventKeys(event.key).message, event.variables)

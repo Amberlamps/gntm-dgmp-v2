@@ -10,11 +10,15 @@ block content
         .header-topline-headline
           h1 Herzlich Willkommen!
           h2 Germany's Next Topmodel Drinking Game Manager Professional
-  .center Version 2.0 kommt mit einer kleiner Verspätung
-  // - if (!user.name)
-  //   +loginPage()
-  // .center
-  //   .page-index
-  //     input(type='button', value='Register').button-confirm
-  //     input(type='button', value='Delete').button-warning
-  //     input(type='button', value='Cancel').button-neutral
+  .center
+    .page-index
+      .events-list
+        .events-header Neuigkeiten
+        each event in events
+          .events-item(data-type=event.key, data-url=eventKeys(event.key).url)
+            .events-date(title=event._createdOn)= moment(event._createdOn).fromNow()
+            .events-message
+              - if (eventKeys(event.key).url)
+                a(href=template(eventKeys(event.key).url, event.variables))!= template(eventKeys(event.key).message, event.variables)
+              - else
+                != template(eventKeys(event.key).message, event.variables)
