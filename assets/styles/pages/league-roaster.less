@@ -1,0 +1,161 @@
+.roaster {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.roaster-divider {
+  background-color: #fff;
+  height: 20px;
+  clear: both;
+}
+
+.roaster-container {
+  position: relative;
+  background-color: #ddd;
+}
+
+.roaster-girl-container {
+  position: relative;
+  float: left;
+  width: 50%;
+  border: 10px transparent solid;
+  box-sizing: border-box;
+}
+
+.roaster-nocontent {
+  line-height: 60px;
+  text-align: center;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  font-size: 0.8em;
+}
+
+.roaster-girl {
+  position: relative;
+  z-index: 1;
+  -webkit-user-select: none;
+  user-select: none;
+  transform: translate3d(0,0,0);
+  background-color: #fff;
+  height: 75px;
+  line-height: 75px;
+  font-size: 1.4em;
+}
+
+.roaster-girl[data-eliminated] {
+  opacity: 0.4;
+}
+
+.roaster-girl-picture {
+  background-size: cover;
+  background-position: 50%;
+  height: 75px;
+  width: 75px;
+  float: left;
+  margin-right: 15px;
+}
+
+.page-league[data-isAdmin=true] .roaster-girl:hover {
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+
+.page-league[data-isAdmin=true] .roaster-girl:active {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+.roaster-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.animate {
+  -webkit-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+
+.roaster-overlay-menu {
+  position: fixed;
+  top: 100%;
+  left: 0;
+  z-index: 3;
+  background-color: @darkPrimaryColor;
+  text-align: center;
+  width: 100%;
+  transition: margin-top 0.3s;
+}
+
+.roaster-overlay-category {
+  background-color: @dividerColor;
+  color: @primaryTextColor;
+  display: inline-block;
+  width: 300px;
+  height: 80px;
+  text-align: left;
+  line-height: 80px;
+  font-size: 2em;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: 600;
+  margin: 15px;
+  opacity: 0.7;
+}
+
+.roaster-overlay-category:hover {
+  opacity: 1;
+}
+
+.roaster-overlay-category:before {
+  font-family: FontAwesome;
+  background-color: @primaryTextColor;
+  color: #fff;
+  float: left;
+  line-height: 80px;
+  width: 80px;
+  height: 80px;
+  font-size: 1em;
+  font-weight: normal;
+  text-align: center;
+  margin-right: 20px;
+}
+
+.roaster-header {
+  border-bottom: 1px @primaryTextColor solid;
+  font-weight: 600;
+  font-size: 1.1em;
+  line-height: 30px;
+  height: 30px;
+}
+
+.roaster-header:before {
+  font-family: FontAwesome;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  text-align: center;
+  display: inline-block;
+  color: #fff;
+  background-color: #212121;
+  font-weight: normal;
+  margin-right: 6px;
+}
+
+.roaster-name:before,
+.roaster-manager:before {
+  content: '\f007';
+}
+
+.roaster-market:before,
+.roaster-freeagent:before {
+  content: '\f1ea';
+}

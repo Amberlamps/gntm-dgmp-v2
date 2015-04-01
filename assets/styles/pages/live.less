@@ -1,0 +1,267 @@
+.livepage {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  background-color: @darkPrimaryColor;
+}
+
+.live-statistics {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: @primaryTextColor;
+}
+
+.live-slider {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 160px;
+  width: 160px;
+  margin-top: -80px;
+  margin-left: -80px;
+  background-color: #000;
+  border-radius: 80px;
+  line-height: 160px;
+  color: #fff;
+  font-size: 5em;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.live-slider:before,
+.live-slider:after {
+  position: absolute ;
+}
+
+.live-slider:before {
+  content: '<';
+  left: 15px;
+}
+
+.live-slider:after {
+  content: '>';
+  right: 15px;
+}
+
+.live-girl-container {
+  height: 200px;
+  width: 200px;
+  border: 5px transparent solid;
+  box-sizing: border-box;
+  float: left;
+}
+
+.live-girls {
+  padding-right: 40px;
+  height: 100%;
+}
+
+.live-girl,
+.live-all {
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-position: 50%;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 5px #fff solid;
+  box-sizing: border-box;
+}
+
+.live-girl {
+  position: relative;
+}
+
+.live-all {
+  background-image: url('/images/all.jpg');
+}
+
+.live-girl-name,
+.live-girl-stats {
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.live-girl-name {
+  top: 0;
+  border-radius: 5px 5px 0px 0px;
+  font-size: 1.5em;
+  text-shadow: 1px 1px #000;
+  line-height: 1em;
+  padding: 6px 0px 3px 0px;
+}
+
+.live-girl-stats {
+  bottom: 0;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.live-girl-stats-drinks,
+.live-girl-stats-jobs {
+  width: 50%;
+  float: left;
+  font-size: 1.6em;
+  line-height: 1em;
+  padding: 3px 0px 1px 0px;
+  text-shadow: 1px 1px #000;
+}
+
+.live-girl-stats-drinks:before,
+.live-girl-stats-jobs:before {
+  font-family: FontAwesome;
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+.live-girl-stats-drinks:before {
+  content: '\f000';
+}
+
+.live-girl-stats-jobs:before {
+  content: '\f005';
+}
+
+.live-closeup {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 20;
+  background-color: rgba(0, 0, 0, 0.94);
+}
+
+.live-closeup-girl,
+.live-closeup-actions {
+  width: 50%;
+  height: 100%;
+  position: relative;
+  float: left;
+}
+
+.live-closeup-actions {
+  color: #fff;
+}
+
+.live-action {
+  max-width: 500px;
+  margin: 15px;
+}
+
+.live-action-minus,
+.live-action-plus,
+.live-action-content {
+  background-color: #222222;
+  border: 3px #fff solid;
+  border-radius: 5px;
+  line-height: 50px;
+}
+
+.live-action-content {
+  margin-left: 65px;
+  margin-right: 65px;
+  font-size: 1.4em;
+}
+
+.live-action-minus {
+  float: left;
+}
+
+.live-action-plus {
+  float: right;
+}
+
+.live-action-minus,
+.live-action-plus {
+  width: 50px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.live-action-minus:hover,
+.live-action-plus:hover {
+  background-color: #000;
+}
+
+.live-action-minus:before,
+.live-action-plus:before {
+  font-family: FontAwesome;
+}
+
+.live-action-minus:before {
+  content: '\f068';
+}
+
+.live-action-plus:before {
+  content: '\f067';
+}
+
+.live-action-value {
+  float: right;
+  margin-right: 15px;
+  margin-left: 15px;
+  background-color: #222;
+}
+
+.live-action-name {
+  margin-left: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.live-closeup-actions-container {
+  display: inline-block;
+  width: 100%;
+}
+
+.live-closeup-close {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fff;
+  padding: 20px;
+}
+
+.live-statistics-content {
+  margin-left: 100px;
+}
+
+.live-statistics-controls {
+  margin: 20px 0px 20px 0px;
+}
+
+.live-statistics-ranking {
+  float: left;
+  width: 50%;
+  border-right: 15px transparent solid;
+  box-sizing: border-box;
+}
+
+.live-closeup-rule-headline:before {
+  font-family: FontAwesome;
+  margin-right: 7px;
+}
+
+.live-closeup-rule-jobs:before {
+  content: '\f005';
+
+}
+
+.live-closeup-rule-drinks:before {
+  content: '\f000';
+}
+
+.live-closeup-rule-jobs,
+.live-closeup-rule-drinks {
+  font-size: 1.8em;
+  margin: 20px 15px -10px 15px;
+}

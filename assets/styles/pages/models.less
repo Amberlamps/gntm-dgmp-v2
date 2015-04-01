@@ -1,0 +1,50 @@
+.page-models {
+  margin-top: 20px;
+}
+
+.model-list-displayname {
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding-left: 75px;
+  padding-top: 3px;
+}
+
+.model-list-item {
+  font-size: 1.3em;
+  cursor: default;
+  height: 60px;
+}
+
+.model-list-item:hover {
+  background-color: @primaryTextColor;
+  color: #e5e5e5;
+}
+
+.model-list-item[data-eliminated] {
+  opacity: 0.3;
+}
+
+.models-list-column {
+  border-bottom: 1px #fff solid;
+}
+
+.models-list-column-small {
+  width: 100px;
+  text-align: center;
+}
+
+.models-list-handle[data-sortname=drinks]:before {
+  content: '\f000';
+}
+
+.models-list-handle[data-sortname=jobs]:before {
+  content: '\f005';
+}
+
+.models-list-handle[data-sortname=eliminated]:before {
+  content: '\f05e';
+}
+
+.models-list-handle[data-sortname=age]:before {
+  content: '\f1fd';
+}

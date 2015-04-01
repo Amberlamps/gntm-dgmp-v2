@@ -1,0 +1,36 @@
+.list {
+  clear: both;
+  display: table;
+  padding-top: 10px;
+  width: 100%;
+}
+
+.list-row {
+  display: table-row;
+}
+
+.list-column {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.list-item {
+  background-color: #e5e5e5;
+  font-weight: 600;
+  color: @primaryTextColor;
+}
+
+.list-handle {
+  text-transform: uppercase;
+  color: #aaa;
+  font-size: .8em;
+  border-bottom: 1px #999 solid;
+  font-weight: 600;
+  padding-left: 5px;
+  cursor: pointer;
+}
+
+.list-handle:before {
+  font-family: FontAwesome;
+  margin-right: 5px;
+}

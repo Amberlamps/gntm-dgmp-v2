@@ -1,0 +1,88 @@
+body {
+  background-color: @color-body-background;
+  font-family: @font-general;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: normal;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+input {
+  font-family: inherit;
+}
+
+input[type=submit],
+input[type=button],
+input[type=text],
+input[type=password] {
+  border: 0;
+  margin: 0;
+}
+
+input[type=text],
+input[type=password] {
+  background-color: transparent;
+}
+
+input[type=submit],
+input[type=button] {
+  cursor: pointer;
+}
+
+*:focus {
+  outline: 0;
+}
+
+div.center {
+  width: 800px;
+  margin: auto;
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.mainpage {
+  position: relative;
+  z-index: 2;
+  background-color: #fff;
+  margin-bottom: 100px;
+  padding-bottom: 20px;
+}
+
+.mainpage:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+
+.page-headline {
+  font-size: 2em;
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}

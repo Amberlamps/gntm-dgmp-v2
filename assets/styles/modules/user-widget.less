@@ -1,0 +1,91 @@
+.user-widget {
+  white-space: nowrap;
+  float: right;
+  position: relative;
+}
+
+.user-widget label {
+  cursor: pointer;
+  display: block;
+  padding-bottom: 8px;
+}
+
+.user-widget-name {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.user-widget-navigation:before {
+  font-family: FontAwesome;
+  content: '\f103';
+}
+
+.user-widget-navigation-list {
+  display: none;
+  position: absolute;
+  background: #212121;
+  margin-top: 1px;
+  z-index: 4;
+  right: 0;
+  width: 150px;
+  text-align: left;
+  margin-right: 3px;
+}
+
+.user-widget-navigation-list-item {
+  text-transform: uppercase;
+  font-size: 0.8em;
+  cursor: pointer;
+  padding: 6px 4px 2px 7px;
+  display: block;
+  text-decoration: none;
+}
+
+.user-widget-navigation-list-item:visited {
+  color: #fff;
+}
+
+.user-widget-navigation-list-item:hover {
+  background-color: #333;
+}
+
+.user-widget-navigation-list-item:before {
+  font-family: FontAwesome;
+  margin-right: 5px;
+}
+
+.user-widget-navigation-list-item-settings:before {
+  content: '\f013';
+}
+
+.user-widget-navigation-list-item-activate:before {
+  content: '\f205';
+}
+
+.user-widget-navigation-list-item-logout:before {
+  content: '\f05e';
+}
+
+.user-widget-navigation-list-item-league:before {
+  content: '\f091';
+}
+
+.user-widget-navigation {
+  display: inline-block;
+  color: #bbb;
+  border-radius: 4px;
+  margin-left: 6px;
+  margin-top: 0px;
+  font-size: 15px;
+  margin-right: 10px;
+}
+
+.user-widget input {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+.user-widget input:checked + .user-widget-navigation-list {
+  display: block;
+}

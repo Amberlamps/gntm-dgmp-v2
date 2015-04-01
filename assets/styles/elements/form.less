@@ -1,0 +1,126 @@
+.formular-section-headline {
+  border-bottom: 1px @primaryTextColor solid;
+  font-weight: 600;
+  font-size: 1.1em;
+  line-height: 30px;
+  height: 30px;
+  background-color: #fff;
+}
+
+.formular-section-headline:before {
+  font-family: FontAwesome;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  text-align: center;
+  display: inline-block;
+  color: #fff;
+  background-color: @primaryTextColor;
+  font-weight: 400;
+  margin-right: 6px;
+  font-size: 0.8em;
+}
+
+.formular-section {
+  background-color: #e5e5e5;
+}
+
+.formular-item {
+  border-bottom: 1px #fff solid;
+}
+
+.formular-item-label {
+  float: left;
+  width: 150px;
+  text-align: right;
+}
+
+.formular-item-label label {
+  margin-right: 12px;
+  font-weight: 600;
+  line-height: 39px;
+}
+
+.formular-item-field {
+  margin: 7px;
+  margin-left: 150px;
+}
+
+.formular-item-input {
+  background-color: #fff;
+  border: 1px #ccc solid;
+  padding: 5px 8px 2px 8px;
+}
+
+.formular-item-input textarea {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  display: block;
+  width: 100%;
+  height: 150px;
+  font-size: 1em;
+  font-family: inherit;
+}
+
+.formular-item-input input {
+  display: block;
+  width: 100%;
+  font-size: 1em;
+}
+
+.formular-buttons {
+  clear: both;
+  margin-top: 20px;
+}
+
+.formular-item-icon:before,
+.formular-item-icon:after {
+  font-family: FontAwesome;
+}
+
+.formular-item-icon:before {
+  font-size: .8em;
+  float: left;
+  margin-right: 8px;
+}
+
+.formular-item-icon:after {
+  font-size: 1.3em;
+  float: right;
+  margin-right: 30px;
+}
+
+.formular-item-icon[for=trophy]:after {
+  content: '\f091';
+}
+
+.formular-item-icon[for=birthday]:after {
+  content: '\f1fd';
+}
+
+.formular-item-icon[for=glass]:after {
+  content: '\f000';
+}
+
+.formular-item-icon[for=news]:after {
+  content: '\f1ea';
+}
+
+.formular-item-field input[type=radio] {
+  display: none;
+}
+
+.formular-item-field input[type=radio] + .formular-item-icon:before {
+  content: '\f10c';
+}
+
+.formular-item-field input[type=radio]:checked + .formular-item-icon:before {
+  content: '\f111';
+}
+
+.formular-item-icon {
+  line-height: 38px;
+  display: inline-block;
+  margin-left: 5px;
+}

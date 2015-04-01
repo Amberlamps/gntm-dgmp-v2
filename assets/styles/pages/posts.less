@@ -1,0 +1,46 @@
+.posts-list-column {
+  border-bottom: 1px #fff solid;
+  padding-left: 10px;
+  padding-top: 2px;
+}
+
+.posts-list-column-small {
+  width: 100px;
+  text-align: center;
+}
+
+.posts-list-handle[data-sortname=author]:before {
+  content: '\f007';
+}
+
+.posts-list-handle[data-sortname=comments]:before {
+  content: '\f086';
+}
+
+.posts-list-handle[data-sortname=created]:before {
+  content: '\f017';
+}
+
+.posts-list .posts-list-column .posts-list-column-delete,
+.posts-list .posts-list-column .posts-list-column-edit {
+  display: inline-block;
+  opacity: 0.8;
+  font-weight: normal;
+  font-size: 0.8em;
+}
+
+.posts-list .posts-list-column form {
+  display: inline-block;
+}
+
+.posts-list-column-delete:before {
+  font-family: FontAwesome;
+  margin-right: 4px;
+  content: '\f05e';
+}
+
+.posts-list-column-edit:before {
+  font-family: FontAwesome;
+  margin-right: 4px;
+  content: '\f040';
+}

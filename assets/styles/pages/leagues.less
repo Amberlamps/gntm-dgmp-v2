@@ -1,0 +1,65 @@
+.page-leagues {
+  margin-top: 20px;
+}
+
+.page-leagues-new {
+  float: right;
+}
+
+.page-leagues-new:before {
+  font-family: FontAwesome;
+  content: '\f067';
+  margin-right: 8px;
+}
+
+.league-list-item {
+  cursor: pointer;
+  height: 35px;
+}
+
+.league-list-item:hover {
+  background-color: @primaryTextColor;
+  color: #e5e5e5;
+}
+
+.league-list-item a {
+  color: inherit;
+  display: block;
+}
+
+.league-list-item[data-eliminated] {
+  opacity: 0.3;
+}
+
+.leagues-list-column {
+  border-bottom: 1px #fff solid;
+  padding-left: 10px;
+  padding-top: 2px;
+}
+
+.leagues-list-column-small {
+  width: 100px;
+  text-align: center;
+}
+
+.leagues-list-handle[data-sortname=members]:before {
+  content: '\f007';
+}
+
+.leagues-list-handle[data-sortname=playdays]:before {
+  content: '\f073';
+}
+
+.leagues-list-handle[data-sortname=founded]:before {
+  content: '\f017';
+}
+
+.leagues-create {
+  margin-bottom: 10px;
+}
+
+.leagues-create:before {
+  font-family: FontAwesome;
+  content: '\f067';
+  margin-right: 10px;
+}

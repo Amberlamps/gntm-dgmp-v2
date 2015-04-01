@@ -1,0 +1,59 @@
+.register {
+  float: right;
+}
+
+.login {
+  float: left;
+}
+
+.register,
+.login {
+  width: 50%; 
+}
+
+.register form,
+.login form {
+  padding: 20px;
+}
+
+.login a {
+  color: #3b5998;
+  padding: 8px 18px 5px 18px;
+}
+
+.form-item {
+  position: relative;
+  border: 1px #ccc solid;
+  height: 60px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.form-item label {
+  cursor: text;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: top 0.3s;
+  width: 100%;
+  text-align: left;
+  padding: 2px 8px;
+  color: #999;
+  font-size: 20px;
+}
+
+.form-item input {
+  width: 100%;
+  padding: 5px 9px;
+  font-size: 20px;
+}
+
+.form-item input:focus + label,
+.form-item input:valid + label {
+  top: 39px;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 0px 7px;
+  background-color: #888;
+  color: #fff;
+}

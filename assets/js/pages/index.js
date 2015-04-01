@@ -1,0 +1,11 @@
+module.exports.IndexPage = require('./indexPage.js');
+module.exports.LeaguePage = require('./leaguePage.js');
+module.exports.LeaguesPage = require('./leaguesPage.js');
+module.exports.LeaguesAddPage = require('./leaguesAddPage.js');
+module.exports.LivePage = require('./livePage.js');
+module.exports.LoginPage = require('./loginPage.js');
+module.exports.LogoutPage = require('./logoutPage.js');
+module.exports.ModelsPage = require('./modelsPage.js');
+module.exports.Page = require('./page.js');
+module.exports.PlaydaysPage = require('./playdaysPage.js');
+module.exports.RulebooksPage = require('./rulebooksPage.js');
