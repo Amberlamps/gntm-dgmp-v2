@@ -17,7 +17,7 @@ block page
                 .page-tables-playday-name= 'Spieltag ' + (i+1)
               .page-tables-playday-values
                 each manager in members
-                  .page-tables-playday-bundle
+                  .page-tables-playday-bundle(style='width: ' + (100/members.length) + '%')
                     .page-tables-playday-value= (playday.managers[manager.member.id.toString()]) ? playday.managers[manager.member.id.toString()].gulps : 0
                     .page-tables-playday-value= (playday.managers[manager.member.id.toString()]) ? playday.managers[manager.member.id.toString()].jobs : 0
         .page-tables-footer

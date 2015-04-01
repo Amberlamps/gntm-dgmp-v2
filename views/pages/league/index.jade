@@ -26,8 +26,7 @@ block page
         each comment in comments
           .comments-list-item
             .comments-list-info
-              != '<b>' + comment.member.name + '</b> von '
-              != '<b>' + comment.league.name + '</b> schrieb am '
+              != '<b>' + comment.member.name + '</b> schrieb am '
               != '<b>' + moment(comment._createdOn).format('DD.MM.') + '</b> um '
               != '<b>' + moment(comment._createdOn).format('HH.mm.ss') + ' Uhr</b>:'
             .comments-list-comment!= comment.comment.replace(/\n/g, '<br />')
