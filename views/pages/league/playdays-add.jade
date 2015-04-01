@@ -3,8 +3,37 @@ extends ../league.jade
 block page
   form(action=((playday.id) ? '/playdays/' + playday.id : '/playdays'), method=((playday.id) ? 'patch' : 'post'), data-action=((playday.id) ? '/playdays/' + playday.id : '/playdays'), data-method=((playday.id) ? 'patch' : 'post'), name=((playday.id) ? 'editPlayday' : 'createPlayday'))
     input(type='hidden', name='league', value=league.id)
+
+    .list
+      .list-row.list-handles
+        .list-column.list-handle.models-list-handle Model
+        .list-column.list-handle.models-list-handle.models-list-column-small Schlücke
+        .list-column.list-handle.models-list-handle.models-list-column-small Jobs
+      each model, i in playday.models
+        input(type="hidden", name="models[" + i + "][model]", value=model.model.id)
+        .list-row.list-item.model-list-item(data-eliminated=(model.model.eliminated) ? model.model.eliminated.toString() : false)
+          .list-column.models-list-column.model-list-displayname(style='background-image: url(/images/' + model.model.pictureFace + ')')= model.model.displayname
+          .list-column.models-list-column.models-list-column-small
+            input.playday-input(type="text", size="3", maxlength="3", name="models[" + i + "][gulps]", value=model.gulps)
+          .list-column.models-list-column.models-list-column-small
+            input.playday-input(type="text", size="3", maxlength="3", name="models[" + i + "][jobs]", value=model.jobs)
+
+    .list
+      .list-row.list-handles
+        .list-column.list-handle.models-list-handle Manager
+        .list-column.list-handle.models-list-handle.models-list-column-small Trinkpunkte
+        .list-column.list-handle.models-list-handle.models-list-column-small Jobpunkte
+      each manager, i in playday.managers
+        input(type="hidden", name="managers[" + i + "][user]", value=manager.user.id)
+        .list-row.list-item.model-list-item
+          .list-column.models-list-column.model-list-displayname= manager.user.name
+          .list-column.models-list-column.models-list-column-small
+            input.playday-input(type="text", size="3", maxlength="3", name="managers[" + i + "][gulps]", value=manager.gulps)
+          .list-column.models-list-column.models-list-column-small
+            input.playday-input(type="text", size="3", maxlength="3", name="managers[" + i + "][jobs]", value=manager.jobs)
+
     .formular-section
-      .formular-section-headline.playday-article Artikel erstellen
+      .formular-section-headline.playday-article Einstellungen
       .formular-item
         .formular-item-label
           label(for='startDate') Datum

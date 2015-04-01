@@ -1,4 +1,33 @@
 extends ../league.jade
 
 block page
-  div League's Tables
+  .page-tables
+    - if (playdays.length)
+      .page-tables-container
+        .page-tables-header
+          each manager in members
+            .page-tables-manager(style='width: ' + (100/members.length) + '%')
+              .page-tables-manager-name= manager.member.name
+              .page-tables-sign.page-tables-sign-drinks
+              .page-tables-sign.page-tables-sign-jobs
+        .page-tables-playdays
+          each playday, i in playdays
+            .page-tables-playday
+              .page-tables-playday-left
+                .page-tables-playday-name= 'Spieltag ' + (i+1)
+              .page-tables-playday-values
+                each manager in members
+                  .page-tables-playday-bundle
+                    .page-tables-playday-value= (playday.managers[manager.member.id.toString()]) ? playday.managers[manager.member.id.toString()].gulps : 0
+                    .page-tables-playday-value= (playday.managers[manager.member.id.toString()]) ? playday.managers[manager.member.id.toString()].jobs : 0
+        .page-tables-footer
+          each manager in members
+            .page-tables-manager(style='width: ' + (100/members.length) + '%')
+              .page-tables-manager-name= manager.member.name
+              .page-tables-sign.page-tables-sign-drinks
+              .page-tables-sign.page-tables-sign-jobs
+          .page-tables-playday-values
+            each manager in members
+              .page-tables-playday-bundle(style='width: ' + (100/members.length) + '%')
+                .page-tables-playday-value= (total[manager.member.id.toString()]) ? total[manager.member.id.toString()].gulps : 0
+                .page-tables-playday-value= (total[manager.member.id.toString()]) ? total[manager.member.id.toString()].jobs : 0

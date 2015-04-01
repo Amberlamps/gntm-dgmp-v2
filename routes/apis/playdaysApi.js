@@ -110,8 +110,6 @@ function postPlaydays(req, res, next) {
     }
 
     data.startDate = moment(datum[1] + '.' + datum[0] + '.' + datum[2])._d;
-    data.models = [];
-    data.managers = [];
 
     var playday = new Playday(data);
 

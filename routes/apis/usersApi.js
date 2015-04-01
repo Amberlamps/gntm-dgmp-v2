@@ -11,6 +11,7 @@ var validation = require('middleware').validation;
 var patchUsersValidation = require('validations').patchUsersValidation;
 var postUsersValidation = require('validations').postUsersValidation;
 var putUsersValidation = require('validations').putUsersValidation;
+var events = require('routes/modules').events;
 
 
 /**
@@ -118,9 +119,21 @@ function postUsers(req, res, next) {
 
     req.session.user = user;
 
-    res.status(201).json({
-      user: user
-    });
+    events.create('user.new', {
+      userId: user.id
+    }, writeResponse);
+
+    function writeResponse(err) {
+
+      if (err) {
+        return next(err);
+      }
+
+      res.status(201).json({
+        user: user
+      });
+
+    }
 
   }
 

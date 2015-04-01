@@ -4,7 +4,7 @@ block page
   form(action=((post.id) ? '/posts/' + post.id : '/posts'), method=((post.id) ? 'patch' : 'post'), data-action=((post.id) ? '/posts/' + post.id : '/posts'), data-method=((post.id) ? 'patch' : 'post'), name=((post.id) ? 'editPost' : 'createPost'))
     input(type='hidden', name='league', value=league.id)
     .formular-section
-      .formular-section-headline.post-article Artikel erstellen
+      .formular-section-headline.post-article= 'Artikel ' + ((post.id) ? 'bearbeiten' : 'erstellen')
       .formular-item
         .formular-item-label
           label(for='title') Titel
@@ -21,7 +21,7 @@ block page
         .formular-item-label
           label Icon
         .formular-item-field
-          input(type='radio', name='icon', value='news', id='news', checked=(post.icon === 'news'))
+          input(type='radio', name='icon', value='news', id='news', checked=(post.icon === 'news' || !post.icon))
           label.formular-item-icon(for='news')
           input(type='radio', name='icon', value='trophy', id='trophy', checked=(post.icon === 'trophy'))
           label.formular-item-icon(for='trophy')

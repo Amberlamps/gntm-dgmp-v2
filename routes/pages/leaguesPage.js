@@ -24,7 +24,8 @@ var ALLOWED_PAGES = {
   posts: 1,
   rulebooks: 1,
   playdays: 1,
-  tables: 1
+  tables: 1,
+  spieltage: 1
 };
 
 
@@ -203,7 +204,7 @@ function getIndexPage(req, res, next) {
 
   function getEvents() {
 
-    Event.find({ scope: leagueId }).sort({ _id: -1 }).limit(20).exec(renderEvents);
+    Event.find({ scope: leagueId }).sort({ _id: -1 }).limit(30).exec(renderEvents);
 
   }
 
@@ -302,6 +303,10 @@ function getLeaguePage(req, res, next) {
       return getTablesPage(league);
     }
 
+    if (page === 'spieltage') {
+      return getSpieltage(league);
+    }
+
   }
 
   function getMembersPage(league) {
@@ -344,21 +349,36 @@ function getLeaguePage(req, res, next) {
         status: 'granted'
       };
 
-      Membership.find(selector).populate('member').exec(writeResponse);
+      Membership.find(selector).populate('member').exec(getMembership);
 
-      function writeResponse(err, members) {
+      function getMembership(err, members) {
 
         var isAdmin = members.filter(function(member) {
           return req.session.user && member.member.id === req.session.user.id && member.role === 'admin';
         });
 
-        res.render('pages/league/roaster', {
-          league: league,
-          page: page,
-          models: models,
-          members: members,
-          isAdmin: isAdmin.length === 1
-        });
+        var selector = {
+          member: req.session.user.id
+        };
+
+        Membership.findOne(selector, writeResponse);
+
+        function writeResponse(err, membership) {
+
+          if (err) {
+            return next(err);
+          }
+
+          res.render('pages/league/roaster', {
+            league: league,
+            page: page,
+            models: models,
+            members: members,
+            isWithoutLeague: !membership,
+            isAdmin: isAdmin.length === 1
+          });
+
+        }
 
       }
 
@@ -395,6 +415,10 @@ function getLeaguePage(req, res, next) {
 
       playdays = playdays || [];
 
+      if (!req.session.user) {
+        return writeResponse(null, {});
+      }
+
       var selector = {
         member: req.session.user.id,
         league: league.id
@@ -425,10 +449,117 @@ function getLeaguePage(req, res, next) {
 
   function getTablesPage(league) {
 
-    res.render('pages/league/tables', {
+    if (!req.session.user) {
+      return writeResponse(null, {});
+    }
+
+    var response = {
       league: league,
       page: page
-    });
+    };
+
+    var selector = {
+      member: req.session.user.id,
+      league: league.id
+    };
+
+    Membership.findOne(selector, getPlaydays);
+
+    function getPlaydays(err, membership) {
+
+      if (err) {
+        return next(err);
+      }
+
+      response.isAdmin = (membership && membership.role === 'admin');
+
+      var selector = {
+        league: league.id
+      };
+
+      Playday.find(selector).sort({ startDate: 1 }).exec(getMembers);
+
+    }
+
+    function getMembers(err, playdays) {
+
+      if (err) {
+        return next(err);
+      }
+
+      var total = {};
+
+      playdays = playdays.map(function(playday) {
+
+        var _playday = JSON.parse(JSON.stringify(playday));
+
+        var lookUp = {};
+
+        _playday.managers.forEach(function(manager) {
+
+          var _managerId = manager.user.toString();
+          lookUp[_managerId] = {
+            gulps: manager.gulps,
+            jobs: manager.jobs
+          };
+
+          if (!total.hasOwnProperty(_managerId)) {
+            total[_managerId] = {
+              gulps: 0,
+              jobs: 0
+            };
+          }
+
+          total[_managerId].gulps += manager.gulps;
+          total[_managerId].jobs += manager.jobs;
+
+        });
+
+        _playday.managers = lookUp;
+
+        return _playday;
+
+      });
+
+      response.total = total;
+      response.playdays = playdays;
+
+      var selector = {
+        league: league.id,
+        status: "granted"
+      };
+
+      Membership.find(selector).populate('member').exec(getMembership)
+
+    }
+
+    function getMembership(err, members) {
+
+      if (err) {
+        return next(err);
+      }
+
+      response.members = members;
+
+      var selector = {
+        member: req.session.user.id
+      };
+
+      Membership.findOne(selector, prepareResponse);
+
+    }
+
+    function prepareResponse(err, membership) {
+
+      if (err) {
+        return next(err);
+      }
+
+      response.isWithoutLeague = !membership;
+
+      res.render('pages/league/tables', response);
+
+    }
 
   }
 
@@ -473,6 +604,98 @@ function getLeaguePage(req, res, next) {
           posts: posts,
           isAdmin: isAdmin
         });
+
+      }
+
+    }
+
+  }
+
+  function getSpieltage(league) {
+
+    if (!req.session.user) {
+      return writeResponse(null, {});
+    }
+
+    var selector = {
+      member: req.session.user.id,
+      league: league.id
+    };
+
+    Membership.findOne(selector, getPlaydays);
+
+    function getPlaydays(err, membership) {
+
+      if (err) {
+        return next(err);
+      }
+
+      var isAdmin = (membership && membership.role === 'admin');
+
+      var selector = {
+        league: league.id
+      };
+
+      Playday.find(selector).populate('models.model managers.user').sort({ startDate: -1 }).exec(sortRankings);
+
+      function sortRankings(err, playdays) {
+
+        if (err) {
+          return next(err);
+        }
+
+        playdays.forEach(function(playday) {
+
+          playday.models.sort(function(a, b) {
+            if (a.gulps > b.gulps) {
+              return -1;
+            } else if (a.gulps < b.gulps) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+
+          var jobs = playday.models.filter(function(model) {
+            return model.jobs > 0;
+          });
+
+          jobs.sort(function(a, b) {
+            if (a.jobs > b.jobs) {
+              return -1;
+            } else if (a.jobs < b.jobs) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+
+          playday.models = playday.models.slice(0, 5);
+          playday.jobs = jobs.slice(0, 5);
+
+        });
+
+        var selector = {
+          member: req.session.user.id
+        };
+
+        Membership.findOne(selector, writeResponse);
+
+        function writeResponse(err, membership) {
+
+          if (err) {
+            return next(err);
+          }
+
+          res.render('pages/league/spieltage', {
+            league: league,
+            page: page,
+            playdays: playdays,
+            isWithoutLeague: !membership,
+            isAdmin: isAdmin
+          });
+
+        }
 
       }
 
@@ -581,10 +804,52 @@ function getPlaydaysPage(req, res, next) {
   }
 
   if (playdaysId === 'new') {
-    return getLeague(null, {});
+    return Model.find({}).sort({ eliminated: 1, displayname: 1}).exec(getMembers);;
   }
 
-  Playday.findOne({ _id: playdaysId }, getLeague);
+  Playday.findOne({ _id: playdaysId }).populate('models.model managers.user').exec(getLeague);
+
+  function getMembers(err, models) {
+
+    if (err) {
+      return next(err);
+    }
+
+    var _models = models.map(function getSingleModel(model) {
+      return {
+        model: model,
+        gulps: 0,
+        jobs: 0
+      };
+    });
+
+    var selector = {
+      status: 'granted',
+      league: leagueId
+    };
+
+    Membership.find(selector).populate('member').exec(function buildPlayday(err, members) {
+
+      if (err) {
+        return next(err);
+      }
+
+      var _members = members.map(function getSingleMember(membership) {
+        return {
+          user: membership.member,
+          gulps: 0,
+          jobs: 0
+        };
+      });
+
+      getLeague(null, {
+        models: _models,
+        managers: _members
+      });
+
+    });
+
+  }
 
   function getLeague(err, playday) {
 

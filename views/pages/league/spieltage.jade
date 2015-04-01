@@ -1,0 +1,34 @@
+extends ../league.jade
+
+block page
+  each spieltag, i in playdays
+    .spieltage-item
+      .spieltage-title= 'Spieltag ' + (playdays.length-i) + ' (' + moment(spieltag.startDate).format('DD.MM.YYYY') + ')'
+      .spieltage-container
+
+        .spieltage-part
+          .spieltage-list
+            .spieltag-list-headline.spieltag-drinks Trinkschlücke
+            each model in spieltag.models
+              .spieltag-list-item
+                .spieltag-list-picture(style='background-image: url(/images/' + model.model.pictureFace + ')')
+                .spieltag-list-value= model.gulps
+                .spieltag-list-name= model.model.displayname
+
+        .spieltage-part
+          .spieltage-list
+            .spieltag-list-headline.spieltag-jobs Jobs
+            each model in spieltag.jobs
+              .spieltag-list-item
+                .spieltag-list-picture(style='background-image: url(/images/' + model.model.pictureFace + ')')
+                .spieltag-list-value= model.jobs
+                .spieltag-list-name= model.model.displayname
+
+        .spieltage-part
+          .spieltage-list
+            .spieltag-list-headline.spieltag-managers Manager
+            each manager in spieltag.managers
+              .spieltag-list-item
+                .spieltag-list-value.spieltag-list-drinksvalue= manager.gulps
+                .spieltag-list-value.spieltag-list-jobsvalue= manager.jobs
+                .spieltag-list-name.spieltag-list-managername= manager.user.name

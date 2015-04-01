@@ -14,13 +14,14 @@ block page
           a(href=(postPrevious) ? '/leagues/' + league.id + '/index/' + postPrevious : '#').leagues-post-navigation-arrow.leagues-post-navigation-previous
         .leagues-post-comments= post.comments + ' Kommentar(e)'
     .leagues-comments
-      .leagues-comments-form
-        form(action='/comments', method='post', data-action='/comments', data-method='post', name='postComment')
-          input(type='hidden', name='league', value=league.id)
-          input(type='hidden', name='post', value=post.id)
-          .leagues-comments-comment
-            textarea(name='comment', placeholder='Schreibe einen Kommentar...')
-          input(type='submit', value='Kommentieren')
+      - if (user.id)
+        .leagues-comments-form
+          form(action='/comments', method='post', data-action='/comments', data-method='post', name='postComment')
+            input(type='hidden', name='league', value=league.id)
+            input(type='hidden', name='post', value=post.id)
+            .leagues-comments-comment
+              textarea(name='comment', placeholder='Schreibe einen Kommentar...')
+            input(type='submit', value='Kommentieren')
       .comments-list
         each comment in comments
           .comments-list-item

@@ -10,6 +10,7 @@ var League = require('schemes').League;
 var Membership = require('schemes').Membership;
 var Post = require('schemes').Post;
 var Playday = require('schemes').Playday;
+var User = require('schemes').User;
 
 
 /**
@@ -22,7 +23,8 @@ var handlerLookup = {
   'member.delete': membershipData,
   'post.new': postData,
   'playday.new': playdayData,
-  'comment.new': commentData
+  'comment.new': commentData,
+  'user.new': userData
 };
 
 
@@ -151,6 +153,36 @@ function commentData(key, data, callback) {
     var eventData = {
       key: key,
       scope: ['all', comment.league.id],
+      variables: variables
+    };
+
+    saveEvent(eventData, callback);
+
+  }
+
+}
+
+function userData(key, data, callback) {
+
+  var selector = {
+    _id: data.userId
+  };
+
+  User.findOne(selector).exec(prepareEvent);
+
+  function prepareEvent(err, user) {
+
+    if (err) {
+      return callback(err);
+    }
+
+    var variables = {
+      userName: user.name
+    };
+
+    var eventData = {
+      key: key,
+      scope: ['all'],
       variables: variables
     };
 

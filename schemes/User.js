@@ -41,7 +41,6 @@ var schema = new Schema({
 
   roaster: {
     type: Array,
-    required: true,
     default: []
   },
 

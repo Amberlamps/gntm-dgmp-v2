@@ -37,8 +37,8 @@ block page
               form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='cancelSubscription')
                 input(type='hidden', name='leagueId', value=league.id)
                 .league-member-action.league-member-delete.submit-substitute(data-form='cancelSubscription') Antrag zurückziehen
-            - else if (member.member.id === user.id && member.status === "granted")
-              form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='cancelMembership')
-                input(type='hidden', name='leagueId', value=league.id)
-                input(type='hidden', name='memberId', value=member.member.id)
-                .league-member-action.league-member-delete.submit-substitute(data-form='cancelMembership') Austreten
+            // - else if (member.member.id === user.id && member.status === "granted")
+            //   form(action='/memberships/' + member.id, method='delete', data-action='/memberships/' + member.id, data-method='delete', name='cancelMembership')
+            //     input(type='hidden', name='leagueId', value=league.id)
+            //     input(type='hidden', name='memberId', value=member.member.id)
+            //     .league-member-action.league-member-delete.submit-substitute(data-form='cancelMembership') Austreten

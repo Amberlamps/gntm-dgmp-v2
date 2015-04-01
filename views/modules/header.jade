@@ -3,7 +3,7 @@ header
     a.header-home-item(href='/')
     a.header-navigation-item(href='/leagues') Ligen
     a.header-navigation-item(href='/models') Models
-    a.header-navigation-item(href='/rulebooks') Regelwerk
+    a.header-navigation-item(href='/files/gntm_regelwerk.pdf') Regelwerk
     .header-user
       - if(user.name)
         .user-widget
@@ -17,6 +17,6 @@ header
             //a(href='/settings').user-widget-navigation-list-item.user-widget-navigation-list-item-settings Einstellungen
             a(href='/logout').user-widget-navigation-list-item.user-widget-navigation-list-item-logout Logout
       - else
-        a.links(href='/login') Login
-        span or
-        a.links(href='/login') Register
+        a.links(href='/login') Einloggen
+        span oder
+        a.links(href='/login') Registrieren

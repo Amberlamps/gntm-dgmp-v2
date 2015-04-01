@@ -16,7 +16,7 @@ block content
   .page-league(data-league=league.id, data-isAdmin=(isAdmin && isAdmin.toString()))
     .page-league-navigation
       .center
-        - if(user && league.id === user.league.toString())
+        - if(user.id && user.league && league.id === user.league.toString())
           .page-navigation-management
             a.page-navigation-management-item(href='/leagues/' + league.id + '/members') Mitglieder
             a.page-navigation-management-item(href='/leagues/' + league.id + '/posts') Beiträge
@@ -25,8 +25,8 @@ block content
         a(class="page-league-navigation-item " + (page === 'index' ? "page-league-navigation-item-selected" : ""), href='/leagues/' + league.id + '/index') Übersicht
         //a(class="page-league-navigation-item " + (page === 'rulebooks' ? "page-league-navigation-item-selected" : ""), href='/leagues/' + league.id + '/rulebooks') Regelwerk
         a(class="page-league-navigation-item " + (page === 'roaster' ? "page-league-navigation-item-selected" : ""), href='/leagues/' + league.id + '/roaster') Roaster
-        a(class="page-league-navigation-item " + (page === 'playdays' ? "page-league-navigation-item-selected" : ""), href='/leagues/' + league.id + '/playdays') Spieltage
-        a(class="page-league-navigation-item " + (page === 'tables' ? "page-league-navigation-item-selected" : ""), href='/leagues/' + league.id + '/tables') Tabelle
+        a(class="page-league-navigation-item " + (page === 'spieltage' ? "page-league-navigation-item-selected" : ""), href='/leagues/' + league.id + '/spieltage') Spieltage
+        a(class="page-league-navigation-item " + (page === 'tables' ? "page-league-navigation-item-selected" : ""), href='/leagues/' + league.id + '/tables') Spielstand
     .page-league-content
       .center
         block page
