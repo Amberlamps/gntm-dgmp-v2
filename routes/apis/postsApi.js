@@ -38,8 +38,8 @@ function patchPosts(req, res, next) {
 
   var postId = req.params.postId;
   var data = req.body;
-  var response = {};
-
+  var response = {}; 
+ 
   var selector = {
     _id: postId
   };
